@@ -1,0 +1,57 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+/* login */
+.titulo-login {
+  font-size: 76px;
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+
+/* Estilo para a página de login do ChatGPT */
+.page-container {
+  display: flex; /*Flexbox para alinhar os itens*/
+}
+/* imagem do robo */
+.robo-image {
+  background-image: url("/imgs/Rectangle\ 1.png");
+  background-size: cover;
+  background-position: 0px; /* MUDAR PARA CENTER DEPOIS*/
+  background-repeat: no-repeat; /* IMPEDIR QUE A IMAGEM SE DUPLIQUE */
+  width: 50vw; /*50 % do tamanho horizontal do monitor*/
+  height: 100vh; /*50% do tamanho vertical do monitor*/
+}
+
+.login-container {
+  width: 50vw; /*50 % do tamanho horizontal do monitor*/
+  height: 100vh; /*50% do tamanho vertical do monitor*/
+  display: flex; /*Flexbox para alinhar os itens*/
+  flex-direction: column; /*Coluna para alinhar os itens verticalmente*/
+  align-items: center; /*Alinha os itens no centro horizontalmente*/
+  justify-content: center; /*Alinha os itens no centro verticalmente*/
+}
+
+.login-container img {
+  height: 50px;
+}
+
+.inpt {
+
+  padding: 19px; /* Margem interna */
+  background-color: #F7F9FB;
+  width: 377px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+
+.btt {
+  cursor: pointer;
+  padding: 23px;
+  color: rgb(255, 255, 255); /* Cor da fonte */ 
+  background-color: #000000; /* Cor de funto */ 
+  width: 377px; /* Largura da tela */
+  border-radius: 10px; /* bordas arredondadas */ 
+  font-size: 16px;
+  border: none;
+  
+}
