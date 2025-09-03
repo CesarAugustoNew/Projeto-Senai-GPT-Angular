@@ -1,2 +1,2 @@
-# senai-gpt-web-angular-jul-25
+# senai-gpt-web-angular
 Projeto SenaiGPT com Angular.
