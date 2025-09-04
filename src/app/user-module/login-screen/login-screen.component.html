@@ -5,16 +5,15 @@
         <h1></h1>
     </div>
 
-    <div class="login-container">
-
+    <div class="login-container" [formGroup]="loginForm">
         <img class="logo" src="imgs/Chat.png" alt="Logo do SenaiGPT.">
 
         <h1 class="titulo-login">Login</h1>
 
-        <input class="inpt" type="text" placeholder="Insira o e-mail">
-        <input class="inpt" type="password" placeholder="Insira a senha">
+        <input class="inpt" type="text" placeholder="Insira o e-mail" formControlName="email">
+        <input class="inpt" type="password" placeholder="Insira a senha" formControlName="password">
 
-        <button class="btt">Entrar</button>
+        <button class="btt" (click)="onLoginClick()">Entrar</button>
 
     </div>
 
