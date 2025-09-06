@@ -55,3 +55,21 @@
   border: none;
   
 }
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  transform: translateY(-12px);
+}
+
+.sucesso-message {
+  color: green ;
+  font-size: 12px;
+  transform: translateY(17px);
+}
+
+.incorreto-message {
+  color: red;
+  font-size: 12px;
+  transform: translateY(17px);
+}

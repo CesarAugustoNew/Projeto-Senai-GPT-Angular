@@ -1,0 +1,117 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  font-family: "inter";
+}
+
+.container {
+  display: flex;
+}
+
+.left-panel {
+  height: 100vh;
+  background-size: cover;
+  background-position: 50%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.top {
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.end {
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.central-panel {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-left: 200px;
+}
+
+.logo {
+  margin-left: 10%;
+  margin-top: 15%;
+  padding: 8px;
+}
+
+.novo_chat {
+  margin: 0px 20px 4px 20px;
+  padding: 20px;
+  color: white;
+  background-color: black;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.conversa {
+  margin: 0px 20px 4px 20px;
+  padding: 20px;
+  font-size: 16px;
+}
+
+.dicas_container {
+  display: flex;
+  margin-left: 10%;
+  margin-top: 20px;
+  font-weight: 400;
+}
+
+.dicas_item {
+  margin-left: 40px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 300px;
+  height: 300px;
+  font-weight: 400;
+}
+
+.p {
+  color: black;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  padding: 20px;
+  background-color: #f7f9fb;
+}
+
+.icone p {
+  padding: 10px;
+  font-weight: bolder;
+  font-size: 20px;
+}
+
+.span {
+  font-weight: bolder;
+  font-size: 20px;
+}
+
+.input {
+  width: 760px;
+  height: 56px;
+  background-color: #F7F9FB;
+  border: none;
+  border-radius: 10px;
+  
+}
+
+.input-container{
+  margin-top: 270px;
+  margin-left: 270px;
+  background-color: #F7F9FB;
+  border-radius: 10px;
+}
+

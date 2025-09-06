@@ -10,6 +10,14 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 export class LoginScreenComponent {
   loginForm: FormGroup;
 
+  emailErrorMessage: string;
+  passwordErrorMessage: string;
+  sucessoErrorMessage: string;
+  incorretoErrorMessage: string;
+
+
+
+
   constructor(private fb: FormBuilder) {
     //Quando a tela iniciar.
 
@@ -21,6 +29,11 @@ export class LoginScreenComponent {
       password: ["", [Validators.required]]
     });
 
+    this.emailErrorMessage = "";
+    this.passwordErrorMessage = "";
+    this.sucessoErrorMessage = "";
+    this.incorretoErrorMessage = "";
+
   }
 
   async onLoginClick() {
@@ -30,12 +43,14 @@ export class LoginScreenComponent {
     console.log("Password", this.loginForm.value.password);
 
     if (this.loginForm.value.email == "") {
-      alert("Preencha o campo de e-mail.");
+      this.emailErrorMessage = "O campo de e-mail e obrigatorio.";
+      this.passwordErrorMessage = "";
       return;
     }
 
     if (this.loginForm.value.password == "") {
-      alert("Preencha a senha.");
+      this.passwordErrorMessage = "O campo de senha e obrigatorio.";
+      this.emailErrorMessage = "";
       return;
     }
     
@@ -52,20 +67,12 @@ export class LoginScreenComponent {
     console.log("STATUS CODE", response.status);
     
     if (response.status >= 200 && response.status <= 299) {
-      alert("Login com sucesso")
+      this.sucessoErrorMessage = "Login realizado com sucesso";
+      this.incorretoErrorMessage = ""
     }else {
-      alert("Seu login deu errado")
+      this.incorretoErrorMessage = "Login deu errado";
+      this.sucessoErrorMessage = ""
     }
-
-    let email2 = this.loginForm.value.email;
-    let password2 = this.loginForm.value.password;
-
-    if (email2.length === 0) {
-      alert("Campo de email obrigatorio")}
-      else if (password2.length === 0) {
-        alert("Campo de senha obrigatorio")
-      }
-
 
   }
 }
