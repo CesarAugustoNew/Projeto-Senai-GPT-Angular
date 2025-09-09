@@ -1,5 +1,7 @@
+import { jsDocComment } from '@angular/compiler';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-login-screen',
@@ -69,10 +71,22 @@ export class LoginScreenComponent {
     if (response.status >= 200 && response.status <= 299) {
       this.sucessoErrorMessage = "Login realizado com sucesso";
       this.incorretoErrorMessage = ""
+      let json = await response.json();
+
+      let meuToken = json.accessToken;
+      let userId = json.user.id;
+
+      localStorage.setItem("meuToken", meuToken)
+      localStorage.setItem("meuId", userId)
+
+      window.location.href = "chat"
+      
     }else {
       this.incorretoErrorMessage = "Login deu errado";
       this.sucessoErrorMessage = ""
     }
+
+
 
   }
 }

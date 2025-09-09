@@ -39,7 +39,6 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-left: 200px;
 }
 
 .logo {
@@ -108,8 +107,7 @@
   
 }
 
-.input-container{
-  margin-top: 270px;
+.input-container{ 
   margin-left: 270px;
   background-color: #F7F9FB;
   border-radius: 10px;
