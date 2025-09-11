@@ -1,25 +1,41 @@
+<main class="page-container"> <!-- Caixa maior -->
 
+  <div class="robo-image">
+    <!-- Imagem do robô (se houver) -->
+  </div>
 
-<main class="page-container">
-    <div class="robo-image">
-        <h1></h1>
-    </div>
+  <div class="login-container" [formGroup]="loginForm">
+    <img class="logo" src="imgs/Chat.png" alt="logo">
+    <h1 class="titulo">Crie um novo usuário</h1>
 
-    <div class="login-container">
-        <img class="logo" src="imgs/Chat.png" alt="Logo do SenaiGPT.">
+    <!-- Campo Nome -->
+    <input class="inpute" type="text" placeholder="Insira seu nome" formControlName="nome">
+    <span class="error-mesage">{{nomeErrorMessage}}</span>
 
-        <h1 class="titulo-login">Novo usuario</h1>
+    <!-- Campo Email -->
+    <input class="inpute" type="text" placeholder="Insira o e-mail" formControlName="email">
+    <span class="error-mesage">{{emailErrorMessage}}</span>
 
-        <input class="inpt" type="text" formControlName="usuario" placeholder="Insira o nome do usuario">
-        <input class="inpt" type="email" formControlName="e-mail" placeholder="Insira o e-mail">
-        <input class="inpt" type="password" formControlName="password" placeholder="Insira a senha">
-        <input class="inpt" type="password" formControlName="password2" placeholder="Insira a senha">
-        <button class="btt">Entrar</button>
-        <a style="margin-top: 10px;" href="#">Clique aqui para fazer login</a>
+    <!-- Campo Senha -->
+    <input class="inpute" type="password" placeholder="Insira a senha" formControlName="password">
+    <span class="error-mesage">{{passwordErrorMessage}}</span>
 
+    <!-- Campo Confirmar Senha -->
+    <input class="inpute" type="password" placeholder="Confirme a senha" formControlName="password2">
 
-    </div>
+    <!-- Botão de envio -->
+    <button class="butone" (click)="onEnterClick()">Entrar</button>
+
+    <!-- Botão para ir à tela de login -->
+    <button class="button3">Clique aqui para fazer o login</button>
+
+    <!-- Mensagens de sucesso e erro -->
+    <span class="aprove-mesage">{{sucessLogin}}</span>
+    <span class="error-mesage">{{errorLogin}}</span>
+  </div>
 
 </main>
 
-<footer></footer>
+<footer>
+  <!-- Rodapé vazio por enquanto -->
+</footer>

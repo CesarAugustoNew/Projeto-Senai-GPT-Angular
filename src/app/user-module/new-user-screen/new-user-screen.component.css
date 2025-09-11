@@ -1,57 +1,68 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+.titulo {
 
-/* login */
-.titulo-login {
-  font-size: 60px;
-  font-weight: 400;
-  margin-bottom: 16px;
-}
-
-/* Estilo para a página de login do ChatGPT */
-.page-container {
-  display: flex; /*Flexbox para alinhar os itens*/
-}
-/* imagem do robo */
-.robo-image {
-  background-image: url("/imgs/Rectangle\ 1.png");
-  background-size: cover;
-  background-position: 0px; /* MUDAR PARA CENTER DEPOIS*/
-  background-repeat: no-repeat; /* IMPEDIR QUE A IMAGEM SE DUPLIQUE */
-  width: 50vw; /*50 % do tamanho horizontal do monitor*/
-  height: 100vh; /*50% do tamanho vertical do monitor*/
-}
-
-.login-container {
-  width: 50vw; /*50 % do tamanho horizontal do monitor*/
-  height: 100vh; /*50% do tamanho vertical do monitor*/
-  display: flex; /*Flexbox para alinhar os itens*/
-  flex-direction: column; /*Coluna para alinhar os itens verticalmente*/
-  align-items: center; /*Alinha os itens no centro horizontalmente*/
-  justify-content: center; /*Alinha os itens no centro verticalmente*/
-}
-
-.login-container img {
-  height: 50px;
-}
-
-.inpt {
-
-  padding: 19px; /* Margem interna */
-  background-color: #F7F9FB;
-  width: 377px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  margin-bottom: 16px;
-}
-
-.btt {
-  cursor: pointer;
-  padding: 23px;
-  color: rgb(255, 255, 255); /* Cor da fonte */ 
-  background-color: #000000; /* Cor de funto */ 
-  width: 377px; /* Largura da tela */
-  border-radius: 10px; /* bordas arredondadas */ 
-  font-size: 16px;
-  border: none;
+  font-size: 76px; /* Ajuste o tamanho conforme necessário */
+  font-family: "inter";
+  text-align: center; /* Alinha o título no centro */
+  margin-top: 0;
+  margin-bottom: 16px; /* Dá um espaçamento abaixo do título */
+  width: 400px;
   
+}
+
+.robo-image{    
+
+    background-image: url("/imgs/Rectangle 1.png");
+    background-size: cover;
+    background-position:0px -100px ;
+    width: 50vw;
+    height: 100vh;
+}
+
+.page-container{    
+
+    display:flex;
+
+
+}
+.login-container{   
+      background-color: rgb(255, 255, 255);
+      width:50vw;
+      height:100vh ;
+
+      /* Kit centralizaçãoverflow */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+.logo{   
+    height: 60px; 
+    margin-bottom: 8px; 
+
+}
+
+.inpute{ 
+ padding: 20px; /*margem interna*/
+ background-color:#F7F9FB;
+ width: 377px;
+ border: 1px solid #ccc;
+ border-radius: 10px;
+ margin-bottom: 16px;
+}
+.butone{    
+ padding: 20px; /*margem interna*/
+ background-color:#F7F9FB;
+ width: 377px;
+ border: 1px solid #ccc;
+ border-radius: 10px;
+ margin-bottom: 16px;
+background-color: #1c1c1c;
+color: #ccc;
+cursor: pointer;
+}
+.button3{   
+    color: blue;
+    background-color: white;
+    border: none;
+    cursor: pointer;
 }

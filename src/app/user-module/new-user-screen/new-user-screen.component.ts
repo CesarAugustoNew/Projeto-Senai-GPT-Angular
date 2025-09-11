@@ -1,86 +1,100 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-new-user-screen',
   imports: [ReactiveFormsModule],
-  templateUrl: './new-user-screen.component.html',
-  styleUrl: './new-user-screen.component.css'
+  templateUrl: './new-user-screem.html',
+  styleUrl: './new-user-screem.css'
 })
-export class NewUserScreenComponent {
-  NewUserScreenComponent: FormGroup;
-
+export class NewUserScreen {
+  loginForm: FormGroup;
+  nomeErrorMessage: string;
   emailErrorMessage: string;
   passwordErrorMessage: string;
-  sucessoErrorMessage: string;
-  incorretoErrorMessage: string;
-
-
-
+  sucessLogin: string;
+  errorLogin: string;
 
   constructor(private fb: FormBuilder) {
-    this.log = this.fb.group({
+    this.loginForm = this.fb.group({
+      nome: ["", [Validators.required]],
       email: ["", [Validators.required]],
-      password: ["", [Validators.required]]
+      password: ["", [Validators.required]],
+      password2: ["", [Validators.required]]
     });
 
+    this.nomeErrorMessage = "";
     this.emailErrorMessage = "";
     this.passwordErrorMessage = "";
-    this.sucessoErrorMessage = "";
-    this.incorretoErrorMessage = "";
-
+    this.sucessLogin = "";
+    this.errorLogin = "";
   }
 
-  async onLoginClick() {
-    alert("Botao de login clicado.");
+  async onEnterClick() {
+    // Limpa mensagens anteriores
+    this.nomeErrorMessage = "";
+    this.emailErrorMessage = "";
+    this.passwordErrorMessage = "";
+    this.sucessLogin = "";
+    this.errorLogin = "";
 
-    console.log("Email", this.loginForm.value.email);
-    console.log("Password", this.loginForm.value.password);
+    // Pega os dados do formulário
+    const nome = this.loginForm.value.nome;
+    const email = this.loginForm.value.email;
+    const password = this.loginForm.value.password;
+    const password2 = this.loginForm.value.password2;
 
-    if (this.loginForm.value.email == "") {
-      this.emailErrorMessage = "O campo de e-mail e obrigatorio.";
-      this.passwordErrorMessage = "";
+    // Validações simples
+    if (nome === "") {
+      this.nomeErrorMessage = "O campo de nome é obrigatório";
       return;
     }
 
-    if (this.loginForm.value.password == "") {
-      this.passwordErrorMessage = "O campo de senha e obrigatorio.";
-      this.emailErrorMessage = "";
+    if (email === "") {
+      this.emailErrorMessage = "O campo de e-mail é obrigatório";
       return;
     }
-    
-    let response = await fetch("https://senai-gpt-api.azurewebsites.net/login", {
-      method: "POST", // Enviar
+
+    if (password === "") {
+      this.passwordErrorMessage = "O campo de senha é obrigatório";
+      return;
+    }
+
+    if (password2 === "") {
+      this.passwordErrorMessage = "Confirme a senha";
+      return;
+    }
+
+    if (password !== password2) {
+      this.passwordErrorMessage = "As senhas não coincidem";
+      return;
+    }
+
+    // Envia os dados para a API
+    let response = await fetch("https://senai-gpt-api.azurewebsites.net/users", {
+      method: "POST",
       headers: {
-        "Content-type": "application/json"
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        email: this.loginForm.value.email,
-        password: this.loginForm.value.password
+        nome: nome,
+        email: email,
+        password: password
       })
     });
-    console.log("STATUS CODE", response.status);
-    
+
+    console.log("Status code: " + response.status);
+
     if (response.status >= 200 && response.status <= 299) {
-      this.sucessoErrorMessage = "Login realizado com sucesso";
-      this.incorretoErrorMessage = ""
+      this.sucessLogin = "Usuário criado com sucesso!";
+      this.errorLogin = "";
       let json = await response.json();
-
-      let meuToken = json.accessToken;
-      let userId = json.user.id;
-
-      localStorage.setItem("meuToken", meuToken)
-      localStorage.setItem("meuId", userId)
-
-      window.location.href = "chat"
-      
-    }else {
-      this.incorretoErrorMessage = "Login deu errado";
-      this.sucessoErrorMessage = ""
+      console.log("Resposta da API:", json);
+      window.location.href = "login";
+    } else {
+      this.errorLogin = "Erro ao criar usuário. Tente novamente.";
+      this.sucessLogin = "";
     }
-
-
-
   }
 }
- 
