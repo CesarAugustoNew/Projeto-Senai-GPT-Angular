@@ -5,8 +5,8 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 @Component({
   selector: 'app-new-user-screen',
   imports: [ReactiveFormsModule],
-  templateUrl: './new-user-screem.html',
-  styleUrl: './new-user-screem.css'
+  templateUrl: './new-user-screen.component.html',
+  styleUrl: './new-user-screen.component.css',
 })
 export class NewUserScreen {
   loginForm: FormGroup;
