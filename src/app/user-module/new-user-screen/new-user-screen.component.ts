@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
-
 @Component({
   selector: 'app-new-user-screen',
   imports: [ReactiveFormsModule],
@@ -29,6 +28,13 @@ export class NewUserScreen {
     this.passwordErrorMessage = "";
     this.sucessLogin = "";
     this.errorLogin = "";
+  }
+
+  // Função para validar a senha
+  validatePassword(password: string): boolean {
+    const minLength = 6;
+    const hasUpperCase = /[A-Z]/.test(password);
+    return password.length >= minLength && hasUpperCase;
   }
 
   async onEnterClick() {
@@ -68,6 +74,11 @@ export class NewUserScreen {
 
     if (password !== password2) {
       this.passwordErrorMessage = "As senhas não coincidem";
+      return;
+    }
+
+    if (!this.validatePassword(password)) {
+      this.passwordErrorMessage = "A senha deve ter no mínimo 6 caracteres e conter pelo menos uma letra maiúscula.";
       return;
     }
 
