@@ -3,9 +3,10 @@
 
         <div class="top">
             <button class="novo_chat"> <i class="fa-solid fa-plus"></i> New Chat</button>
-            <button class="conversa"> <i class="fa-regular fa-message"></i> Al Chat Tool Ethics</button>
-            <button class="conversa"> <i class="fa-regular fa-message"></i> Al Chat Tool Impact Writing</button>
-            <button class="conversa"> <i class="fa-regular fa-message"></i> New Chat</button>
+            
+            <button *ngFor="let chat of chats" class="conversa"> 
+                <i class="fa-regular fa-message"></i>
+                {{chat.chatTitle}}</button>
         </div>
 
         <div class="end">
