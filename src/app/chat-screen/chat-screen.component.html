@@ -4,9 +4,12 @@
         <div class="top">
             <button class="novo_chat"> <i class="fa-solid fa-plus"></i> New Chat</button>
             
-            <button *ngFor="let chat of chats" class="conversa"> 
-                <i class="fa-regular fa-message"></i>
-                {{chat.chatTitle}}</button>
+            @for (chat of chats; track $index) {
+                <button class="conversa" (click)="onChatClick(chat)">
+                    <i class="fa-recular fa-message"></i>
+                    {{ chat.chatTitle }}
+                </button>
+            }
         </div>
 
         <div class="end">
