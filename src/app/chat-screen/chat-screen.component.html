@@ -24,9 +24,12 @@
 
 
     <main class="central-panel">
-        <span class="logo"><img src="imgs/Chat.png" alt="Logo Senai GPT"></span>
 
-        <div class="dicas_container">
+        @if (chatSelecionado == null) {
+
+            <span class="logo"><img src="imgs/Chat.png" alt="Logo Senai GPT"></span>
+
+             <div class="dicas_container">
 
             <div class="dicas_item">
 
@@ -71,13 +74,35 @@
                 <P class="P">Limited knowledge of world andevents after 2021.</P>
             </div>
 
-        </div>
+             </div>
+        }
+
+        @if (chatSelecionado != null) {
+
+            <div class="chat-container"> 
+
+                <div class="chat-header">
+                    <h2>{{ chatSelecionado.chatTitle }}</h2>
+                </div>
+
+                <div class="chat-messagens">
+
+                    @for (msg of mensagens; track $index) {
+                        <p class="message-item" [class.chatbot]="msg.userId == 'chatbot' " > {{msg.text}} </p>
+                    }
+                </div>
+
+            </div>
+
+        }
+
+        
 
         <div class="input-container">   
             <i class="fa-solid fa-microphone"></i>
             <i class="fa-regular fa-image"></i>
-            <input class="input" type="text" placeholder= "Type message" >
-            <i class="fa-solid fa-paper-plane"></i>
+            <input [formControl]="mensagemUsuario" class="input" type="text" placeholder= "Type message" >
+            <i class="send-button fa-solid fa-paper-plane" (click)="enviarMensagem()"></i>
         </div>
     </main>
         

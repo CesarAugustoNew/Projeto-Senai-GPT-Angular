@@ -58,7 +58,7 @@
 
 .conversa {
   margin: 0px 20px 4px 20px;
-  padding: 20px;
+  padding: 16px;
   font-size: 16px;
 }
 
@@ -111,5 +111,56 @@
   margin-left: 270px;
   background-color: #F7F9FB;
   border-radius: 10px;
+}
+
+.chat-container {
+
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+
+  /* Para corrigir o bug que acontece quando há muitas mensagens no chat */
+  height: 90dvh;
+  overflow: auto;
+
+}
+
+.chat-header {
+
+  margin-bottom: 20px;
+
+}
+
+.chat-messages {
+
+  width: 100%;
+
+}
+
+.chat-container .message-item {
+
+  background-color: #ccc;
+  border-radius: 12px 12px 0 12px;
+  padding: 20px;
+  width: 300px;
+  margin-left: auto;
+  margin-bottom: 20px;
+
+}
+
+.chat-container .message-item.chatbot {
+
+  background-color: #ccc;
+  border-radius: 12px 12px 12px 0px;
+  padding: 20px;
+  width: 300px;
+  margin-left: unset;
+  color: white;
+  background: #000;
+
 }
 
