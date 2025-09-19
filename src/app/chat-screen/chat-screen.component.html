@@ -101,8 +101,10 @@
         <div class="input-container">   
             <i class="fa-solid fa-microphone"></i>
             <i class="fa-regular fa-image"></i>
+           
             <input [formControl]="mensagemUsuario" class="input" type="text" placeholder= "Type message" >
-            <i class="send-button fa-solid fa-paper-plane" (click)="enviarMensagem()"></i>
+            <button type="submit"><i class="send-button fa-solid fa-paper-plane" (click)="enviarMensagem()"></i></button>
+            
         </div>
     </main>
         
