@@ -2,7 +2,7 @@
     <aside class="left-panel">
 
         <div class="top">
-            <button class="novo_chat"> <i class="fa-solid fa-plus"></i> New Chat</button>
+            <button class="novo_chat" (click)="novoChat()"> New Chat</button>
             
             @for (chat of chats; track $index) {
                 <button class="conversa" (click)="onChatClick(chat)">
@@ -78,6 +78,7 @@
         }
 
         @if (chatSelecionado != null) {
+            <!-- so vai ser executado quando o ususario tiver clicado em um chat-->
 
             <div class="chat-container"> 
 
@@ -93,19 +94,18 @@
                 </div>
 
             </div>
-
+            
+            <div class="input-container">   
+                <i class="fa-solid fa-microphone"></i>
+                <i class="fa-regular fa-image"></i>
+               
+                <input [formControl]="mensagemUsuario" class="input" type="text" placeholder= "Type message" >
+                <button type="submit"><i class="send-button fa-solid fa-paper-plane" (click)="enviarMensagem()"></i></button>
+                
+            </div>
         }
 
         
-
-        <div class="input-container">   
-            <i class="fa-solid fa-microphone"></i>
-            <i class="fa-regular fa-image"></i>
-           
-            <input [formControl]="mensagemUsuario" class="input" type="text" placeholder= "Type message" >
-            <button type="submit"><i class="send-button fa-solid fa-paper-plane" (click)="enviarMensagem()"></i></button>
-            
-        </div>
     </main>
         
 </div>
