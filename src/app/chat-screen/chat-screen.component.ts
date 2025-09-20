@@ -23,7 +23,7 @@ interface IMessage {
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './chat-screen.component.html',
-  styleUrl: './chat-screen.component.css'
+  styleUrls: ['./chat-screen.component.css']
 })
 export class ChatScreen {
   chats: IChat[] = [];
@@ -40,16 +40,19 @@ export class ChatScreen {
     this.getChats();
   }
 
+  // Busca os chats da API e filtra pelo userId do usuário logado
   async getChats() {
     try {
       const response = await firstValueFrom(
-        this.http.get("https://senai-gpt-api.azurewebsites.net/chats", {
+        this.http.get<IChat[]>("https://senai-gpt-api.azurewebsites.net/chats", {
           headers: {
             "Authorization": "Bearer " + localStorage.getItem("meuToken")
           }
         })
       );
-      this.chats = response as IChat[];
+
+      const userId = localStorage.getItem("meuId") || "";
+      this.chats = response.filter(chat => chat.userId === userId);
     } catch (error) {
       console.error("Erro ao buscar os chats:", error);
     }
@@ -60,14 +63,17 @@ export class ChatScreen {
 
     try {
       const response = await firstValueFrom(
-        this.http.get("https://senai-gpt-api.azurewebsites.net/messages?chatId=" + chatClicado.id, {
-          headers: {
-            "Authorization": "Bearer " + localStorage.getItem("meuToken")
+        this.http.get<IMessage[]>(
+          `https://senai-gpt-api.azurewebsites.net/messages?chatId=${chatClicado.id}`,
+          {
+            headers: {
+              "Authorization": "Bearer " + localStorage.getItem("meuToken")
+            }
           }
-        })
+        )
       );
 
-      this.mensagens = response as IMessage[];
+      this.mensagens = response;
       this.cd.detectChanges();
     } catch (error) {
       console.error("Erro ao buscar mensagens:", error);
@@ -109,27 +115,29 @@ export class ChatScreen {
       // Atualiza o chat
       await this.onChatClick(this.chatSelecionado);
 
-      // Chama o Gemini
-      const respostaIAResponse = await firstValueFrom(this.http.post(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
-        {
-          contents: [
-            {
-              parts: [
-                {
-                  text: mensagemDoUsuario
-                }
-              ]
+      // Chama o Gemini (IA)
+      const respostaIAResponse = await firstValueFrom(
+        this.http.post(
+          "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+          {
+            contents: [
+              {
+                parts: [
+                  {
+                    text: mensagemDoUsuario
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            headers: {
+              "content-type": "application/json",
+              "x-goog-api-key": "AIzaSyDV2HECQZLpWJrqCKEbuq7TT5QPKKdLOdo"
             }
-          ]
-        },
-        {
-          headers: {
-            "content-type": "application/json",
-            "x-goog-api-key": "AIzaSyDV2HECQZLpWJrqCKEbuq7TT5QPKKdLOdo"
           }
-        }
-      )) as any;
+        )
+      ) as any;
 
       // Cria a mensagem da IA
       const novaRespostaIA = {
@@ -139,49 +147,64 @@ export class ChatScreen {
       };
 
       // Salva a resposta da IA
-      await firstValueFrom(this.http.post(
-        "https://senai-gpt-api.azurewebsites.net/messages",
-        novaRespostaIA,
-        {
-          headers: {
-            "Content-type": "application/json",
-            "Authorization": "Bearer " + localStorage.getItem("meuToken")
+      await firstValueFrom(
+        this.http.post(
+          "https://senai-gpt-api.azurewebsites.net/messages",
+          novaRespostaIA,
+          {
+            headers: {
+              "Content-type": "application/json",
+              "Authorization": "Bearer " + localStorage.getItem("meuToken")
+            }
           }
-        }
-      ));
+        )
+      );
 
-      // Atualiza novamente
+      // Atualiza novamente as mensagens do chat
       await this.onChatClick(this.chatSelecionado);
     } catch (error) {
       console.error("Erro ao enviar mensagem ou obter resposta da IA:", error);
     }
   }
 
-  async novoChat () {
-
+  async novoChat() {
     const nomeChat = prompt("Digite o nome do novo chat");
 
-    if (!nomeChat) {
-      // Caso o usuario deixe o campo vazio.
-      alert("Nome invalido.");
-      return; // Para a execucao do metodo.
+    if (!nomeChat || !nomeChat.trim()) {
+      alert("Nome inválido.");
+      return;
     }
 
     const novoChatObj = {
-
-      chatTitle: nomeChat,
+      chatTitle: nomeChat.trim(),
       userId: localStorage.getItem("meuId")
-      //id - O backend ira gerar.
-    }
-    
-    let novoChatResponse = await firstValueFrom(this.http.post("https://senai-gpt-api.azurewebsites.net/messages",novoChatObj,
-      {
-        headers: {
-          "Content-type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("meuToken")
-        }
-      }
-    ));
+      // Backend gera o ID
+    };
 
+    try {
+      const novoChatResponse = await firstValueFrom(
+        this.http.post<IChat>(
+          "https://senai-gpt-api.azurewebsites.net/chats",  // Rota correta para criar chat
+          novoChatObj,
+          {
+            headers: {
+              "Content-type": "application/json",
+              "Authorization": "Bearer " + localStorage.getItem("meuToken")
+            }
+          }
+        )
+      );
+
+      await this.getChats();
+      await this.onChatClick(novoChatResponse);
+    } catch (error) {
+      console.error("Erro ao criar novo chat:", error);
+      alert("Erro ao criar novo chat. Tente novamente.");
+    }
+  }
+
+  deslogar() {
+    localStorage.clear();
+    window.location.href = "login";
   }
 }
