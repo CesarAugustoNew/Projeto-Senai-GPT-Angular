@@ -1,107 +1,111 @@
-<div class="container">
-    <aside class="left-panel">
+<div class="page-container">
 
-        <div class="top">
-            <button class="novo_chat" (click)="novoChat()"> New Chat</button>
-            
-            @for (chat of chats; track $index) {
-                <button class="conversa" (click)="onChatClick(chat)">
-                    <i class="fa-recular fa-message"></i>
-                    {{ chat.chatTitle }}
-                </button>
+    <aside class="side-bar">
+        <div class="menu-top">
+            <button class="button"(click)="novoChat()">+ New chat</button>
+
+            @for (chat of chats; track $index){
+            <button class="btn" (click)="onChatClick(chat)">
+                <i class="fa-solid fa-trash-can"></i>
+                {{ chat.chatTitle }}
+            </button>
             }
+
+
+        </div>
+        <div class="menu-down">
+            <button><i class="fa-solid fa-trash-can"></i> Clear conversations</button>
+            <button><i class="fa-regular fa-sun"></i>Light mode</button>
+            <button><i class="fa-solid fa-user"></i>My account</button>
+            <button><i class="fa-solid fa-arrow-up-right-from-square"></i>Updates & FAQ</button>
+            <button (click)="deslogar()"><i class="fa-solid fa-arrow-right-from-bracket" ></i>Log out</button>
+
         </div>
 
-        <div class="end">
-            <button class="conversa"> <i class="fa-solid fa-arrow-right-from-bracket"></i> Log out</button>
-        </div>
 
     </aside>
-
 
     <main class="central-panel">
 
         @if (chatSelecionado == null) {
 
-            <span class="logo"><img src="imgs/Chat.png" alt="Logo Senai GPT"></span>
+        <div class="logo"></div>
 
-             <div class="dicas_container">
+        <div class="dicas-container">
 
-            <div class="dicas_item">
 
-                <div class="icone">
-                    <span class="text"><i class="fa-solid fa-comments"></i></span>
-                    <p>Examples</p>
-                </div>
+            <div class="dicas-item">
+                <h2>
+                    <i class="fa-regular fa-comments"></i>
+                    Examples
+                </h2>
 
-                <p class="P">Explain quantum computing insimple terms.</p>
-                <P class="P">Got any creative ideas for a 10year old's birthday?</P>
-                <P class="P">How do I make an HTTP requestin Javascript?</P>
-                
+                <p>"Explain quantum computing insimple terms"</p>
+                <p>"Got any creative ideas for a 10year old's birthday?"</p>
+                <p>"How do I make an HTTP requestin Javascript?"</p>
             </div>
 
-            <div class="dicas_item">
+            <div class="dicas-item">
+                <h2>
+                    <i class="fa-regular fa-star"></i>
+                    Capabilities
+                </h2>
 
-                <div class="icone">
-
-                    <span class="star"><i class="fa-solid fa-star"></i></span>
-                    <p>Compabilities</p>
-
-                </div>
-
-                <p class="P">Remembers what user saidearlier in the conversation.</p>
-                <P class="P">Allows user to provide follow-up corrections.</P>
-                <P class="P">Trained to decline inappropriate requests.</P>
-
+                <p>"Remembers what user saidearlier in the conversation."</p>
+                <p>"Allows user to provide follow-up corrections."</p>
+                <p>"Trained to decline inappropriate requests."</p>
             </div>
 
-            <div class="dicas_item">
-                
-                <div class="icone">
+            <div class="dicas-item">
+                <h2>
+                    <i class="fa-solid fa-user-shield"></i>
+                    Limitations
+                </h2>
 
-                    <span class="shield"><i class="fa-solid fa-shield-halved"></i></span>
-                    <p>Limitations</p>
-
-                </div>
-                
-                <p class="P">May occasionally generate incorrect information.</p>
-                <P class="P">May occasionally produce harmful instructions or biased content.</P>
-                
-                <P class="P">Limited knowledge of world andevents after 2021.</P>
+                <p>"May occasionally generate incorrect information."</p>
+                <p>"May occasionally produce harmful instructions or biased content."</p>
+                <p>"Limited knowledge of world andevents after 2021."</p>
             </div>
 
-             </div>
+        </div>
+
         }
 
         @if (chatSelecionado != null) {
-            <!-- so vai ser executado quando o ususario tiver clicado em um chat-->
+            <!-- //so vai ser executado quando o usuario tiver clicado em um chat -->
 
-            <div class="chat-container"> 
+        <div class="chat-container">
 
-                <div class="chat-header">
-                    <h2>{{ chatSelecionado.chatTitle }}</h2>
-                </div>
-
-                <div class="chat-messagens">
-
-                    @for (msg of mensagens; track $index) {
-                        <p class="message-item" [class.chatbot]="msg.userId == 'chatbot' " > {{msg.text}} </p>
-                    }
-                </div>
+            <div class="chat-header">
+                <h2>
+                    {{ chatSelecionado.chatTitle }}
+                </h2>
 
             </div>
-            
-            <div class="input-container">   
+
+            <div class="chat-messages">
+                @for (msg of messages; track $index){
+                <p class="message-item" [class.chatbot]="msg.userId == 'chatbot'">{{ msg.text }}</p>
+
+                }
+            </div>
+
+
+        </div>
+        <div class="message">
+            <button aria-label="Send image">
+                <i class="fa-solid fa-image"></i>
+            </button>
+
+            <input [formControl]="userMessage" type="text" placeholder="Type your message">
+            <button aria-label="Send voice message">
                 <i class="fa-solid fa-microphone"></i>
-                <i class="fa-regular fa-image"></i>
-               
-                <input [formControl]="mensagemUsuario" class="input" type="text" placeholder= "Type message" >
-                <button type="submit"><i class="send-button fa-solid fa-paper-plane" (click)="enviarMensagem()"></i></button>
-                
-            </div>
-        }
+            </button>
 
-        
+            <button aria-label="Send message">
+                <i class="fa-solid fa-paper-plane" (click)="sendMessage()"></i>
+            </button>
+        </div>
+        }
     </main>
-        
 </div>

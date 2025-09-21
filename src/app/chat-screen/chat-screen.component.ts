@@ -1,210 +1,183 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { firstValueFrom } from 'rxjs';
-import { ChangeDetectorRef } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { firstValueFrom } from 'rxjs';
+
 
 interface IChat {
   chatTitle: string;
   id: number;
-  userId: string;
+  userId: string
 }
 
-interface IMessage {
+interface IMessages {
   chatId: number;
   id: number;
   text: string;
-  userId: string;
+  userId: string
 }
 
 @Component({
   selector: 'app-chat-screen',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './chat-screen.component.html',
-  styleUrls: ['./chat-screen.component.css']
+  styleUrl: './chat-screen.component.css'
 })
-export class ChatScreen {
-  chats: IChat[] = [];
-  chatSelecionado: IChat | null = null;
-  mensagens: IMessage[] = [];
-  mensagemUsuario = new FormControl("");
 
-  constructor(
-    private http: HttpClient,
-    private cd: ChangeDetectorRef
-  ) { }
+export class ChatScreen {
+
+  chats: IChat[];
+  chatSelecionado: IChat;
+  messages: IMessages[];
+  userMessage = new FormControl("");
+
+  constructor(private http: HttpClient, private cd: ChangeDetectorRef) {
+    this.chats = [];
+    this.chatSelecionado = null!;
+    this.messages = [];
+
+  }
 
   ngOnInit() {
     this.getChats();
+
   }
-
-  // Busca os chats da API e filtra pelo userId do usuário logado
+ //
   async getChats() {
-    try {
-      const response = await firstValueFrom(
-        this.http.get<IChat[]>("https://senai-gpt-api.azurewebsites.net/chats", {
-          headers: {
-            "Authorization": "Bearer " + localStorage.getItem("meuToken")
-          }
-        })
-      );
+    let response = await firstValueFrom(this.http.get("https://senai-gpt-api.azurewebsites.net/chats", {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("meuToken")
+      }
+    })) as IChat[];
 
-      const userId = localStorage.getItem("meuId") || "";
-      this.chats = response.filter(chat => chat.userId === userId);
-    } catch (error) {
-      console.error("Erro ao buscar os chats:", error);
+    if (response) {
+
+      console.log("Chats", response);
+      let userId = localStorage.getItem("meuId");
+      response = response.filter(chat => chat.userId == userId)
+      this.chats = response as [];
+      
+    } else {
+      console.log("Chat", response)
     }
+
+    this.cd.detectChanges();
+
   }
 
   async onChatClick(chatClicado: IChat) {
+
+    console.log("ChatClicado", chatClicado)
+
     this.chatSelecionado = chatClicado;
 
-    try {
-      const response = await firstValueFrom(
-        this.http.get<IMessage[]>(
-          `https://senai-gpt-api.azurewebsites.net/messages?chatId=${chatClicado.id}`,
-          {
-            headers: {
-              "Authorization": "Bearer " + localStorage.getItem("meuToken")
-            }
-          }
-        )
-      );
+    let response = await firstValueFrom(this.http.get("https://senai-gpt-api.azurewebsites.net/messages?chatId=" +
+      chatClicado.id, {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("meuToken")
+      }
+    }));
 
-      this.mensagens = response;
-      this.cd.detectChanges();
-    } catch (error) {
-      console.error("Erro ao buscar mensagens:", error);
-    }
+    console.log("Mensagens", response);
+
+    this.messages = response as [];
+
+    this.cd.detectChanges();
+
   }
 
-  async enviarMensagem() {
-    if (!this.chatSelecionado || !this.mensagemUsuario.value?.trim()) {
-      console.warn("Chat não selecionado ou mensagem vazia.");
-      return;
-    }
+  async sendMessage() {
 
-    const mensagemDoUsuario = this.mensagemUsuario.value.trim();
-
-    const novaMensagemUsuario = {
+    let newMessageUser = {
       chatId: this.chatSelecionado.id,
       userId: localStorage.getItem("meuId"),
-      text: mensagemDoUsuario
+      text: this.userMessage.value
+
     };
 
-    try {
-      // Envia a mensagem do usuário
-      await firstValueFrom(
-        this.http.post(
-          "https://senai-gpt-api.azurewebsites.net/messages",
-          novaMensagemUsuario,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": "Bearer " + localStorage.getItem("meuToken")
+    let newMessageUserResponse = await firstValueFrom(this.http.post("https://senai-gpt-api.azurewebsites.net/messages", newMessageUser, {
+      headers: {
+        "content-type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("meuToken")
+      },
+
+    }));
+
+    await this.onChatClick(this.chatSelecionado);
+
+    //enviar mensagem para a IA responder.
+
+    let respostaIAResponse = await firstValueFrom(this.http.post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent", {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": this.userMessage.value +". Me de uma resposta objetiva"
             }
-          }
-        )
-      );
+          ]
+        }
+      ]
+    },{
+      headers:{
+        "content-type":"application;json",
+        "x-goog-api-key":"AIzaSyDV2HECQZLpWJrqCKEbuq7TT5QPKKdLOdo"
+      }
+    })) as any;
 
-      // Limpa o input
-      this.mensagemUsuario.setValue("");
-
-      // Atualiza o chat
-      await this.onChatClick(this.chatSelecionado);
-
-      // Chama o Gemini (IA)
-      const respostaIAResponse = await firstValueFrom(
-        this.http.post(
-          "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
-          {
-            contents: [
-              {
-                parts: [
-                  {
-                    text: mensagemDoUsuario
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            headers: {
-              "content-type": "application/json",
-              "x-goog-api-key": "AIzaSyDV2HECQZLpWJrqCKEbuq7TT5QPKKdLOdo"
-            }
-          }
-        )
-      ) as any;
-
-      // Cria a mensagem da IA
-      const novaRespostaIA = {
-        chatId: this.chatSelecionado.id,
-        userId: "chatbot",
-        text: respostaIAResponse.candidates[0].content.parts[0].text
-      };
-
-      // Salva a resposta da IA
-      await firstValueFrom(
-        this.http.post(
-          "https://senai-gpt-api.azurewebsites.net/messages",
-          novaRespostaIA,
-          {
-            headers: {
-              "Content-type": "application/json",
-              "Authorization": "Bearer " + localStorage.getItem("meuToken")
-            }
-          }
-        )
-      );
-
-      // Atualiza novamente as mensagens do chat
-      await this.onChatClick(this.chatSelecionado);
-    } catch (error) {
-      console.error("Erro ao enviar mensagem ou obter resposta da IA:", error);
+    let newAnswerIA = {
+      chatId: this.chatSelecionado.id,
+      userId: "chatbot",
+      text: respostaIAResponse.candidates[0].content.parts[0].text
     }
+
+    let newMessageIAResponse = await firstValueFrom(this.http.post("https://senai-gpt-api.azurewebsites.net/messages", newAnswerIA, {
+      headers: {
+        "content-type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("meuToken")
+      },
+    }));
+          await this.onChatClick(this.chatSelecionado);
+          this.userMessage.setValue("");
   }
 
   async novoChat() {
-    const nomeChat = prompt("Digite o nome do novo chat");
 
-    if (!nomeChat || !nomeChat.trim()) {
-      alert("Nome inválido.");
-      return;
+    const nomeChat = prompt("Digite o nome do novo chat : ")
+
+    if (!nomeChat) {
+      // caso o usuario deixe o campo vazio 
+      alert("Nome invalido.");
+      return 
     }
 
     const novoChatObj = {
-      chatTitle: nomeChat.trim(),
-      userId: localStorage.getItem("meuId")
-      // Backend gera o ID
-    };
-
-    try {
-      const novoChatResponse = await firstValueFrom(
-        this.http.post<IChat>(
-          "https://senai-gpt-api.azurewebsites.net/chats",  // Rota correta para criar chat
-          novoChatObj,
-          {
-            headers: {
-              "Content-type": "application/json",
-              "Authorization": "Bearer " + localStorage.getItem("meuToken")
-            }
-          }
-        )
-      );
-
-      await this.getChats();
-      await this.onChatClick(novoChatResponse);
-    } catch (error) {
-      console.error("Erro ao criar novo chat:", error);
-      alert("Erro ao criar novo chat. Tente novamente.");
+      chatTitle: nomeChat,
+      userId: localStorage.getItem("meuId"),
+      //id back end que gera 
     }
+
+    let novoChatResponse = await firstValueFrom(this.http.post("https://senai-gpt-api.azurewebsites.net/chats", novoChatObj, {
+      headers: {
+        "content-type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("meuToken")
+      },
+    })) as IChat;
+
+    await this.getChats();
+    await this.onChatClick(novoChatResponse);
   }
 
   deslogar() {
+    //jeito 1 
+    localStorage.removeItem("meuToken");
+    localStorage.removeItem("meuId");
+
+    //jeito 2
     localStorage.clear();
+
     window.location.href = "login";
   }
+
+
 }
