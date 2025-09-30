@@ -17,6 +17,7 @@ export class LoginScreenComponent {
   erroMessage = '';
 
   private readonly apiUrl = 'https://senai-gpt-api.azurewebsites.net/login';
+incorretoErrorMessage: any;
 
   constructor(private fb: FormBuilder) {
     this.loginForm = this.fb.group({

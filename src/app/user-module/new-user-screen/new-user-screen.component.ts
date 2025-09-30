@@ -18,6 +18,8 @@ export class NewUserScreen {
   errorMessage = '';
 
   private readonly apiUrl = 'https://senai-gpt-api.azurewebsites.net/users';
+sucessLogin: any;
+errorLogin: any;
 
   constructor(private fb: FormBuilder) {
     this.loginForm = this.fb.group({
