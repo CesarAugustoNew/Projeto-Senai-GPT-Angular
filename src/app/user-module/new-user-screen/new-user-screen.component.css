@@ -66,3 +66,37 @@ cursor: pointer;
     border: none;
     cursor: pointer;
 }
+
+/* Media Query */
+@media screen and (max-width: 1366px) {
+  /* Ate 1366px e um monitor pequeno */
+
+}
+
+@media screen and (max-width: 1000px) {
+  /* Ate 1000px e um tablet */
+
+  .robo-image {
+    background-position: center;
+  }
+
+}
+
+
+@media screen and (max-width: 768px ) {
+
+  /* Ate 768px e um celular */
+
+  .robo-image {
+
+    display: none;
+
+  }
+
+  .login-container {
+
+    width: 100vw;
+
+  }
+
+}
