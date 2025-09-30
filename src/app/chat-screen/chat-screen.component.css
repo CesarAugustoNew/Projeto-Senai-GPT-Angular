@@ -1,7 +1,7 @@
 
 .page-container{
-    width: 100vw;/*Largura da tela*/
-    height:100vh;/*Altura da tela*/
+    width: 100vw;
+    height:100vh;
     display: flex;
 }
 
@@ -173,7 +173,7 @@ font-size: 20px;
   padding-right: 20px;
   padding-bottom: 20px;
 
-  /* Para corrigir o bug que acontece quando há muitas mensagens no chat */
+  
   height: 90dvh;
   overflow: auto;
 

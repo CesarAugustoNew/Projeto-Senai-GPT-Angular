@@ -7,16 +7,15 @@ import { catchError, throwError } from 'rxjs';
 
 export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
 
-  const router = inject(Router); //Direciona para as telas.
+  const router = inject(Router); 
 
   return next (req).pipe(
 
     catchError((err: HttpErrorResponse) => {
 
       if (err.status == 401) {
-        // Token expirou
-        localStorage.clear(); // Limpa todos dos dados do localStorage
-        router.navigate(['/login']);  // Redireciona para o login.
+        localStorage.clear(); 
+        router.navigate(['/login']);  //
       }
 
       return throwError(() => err);

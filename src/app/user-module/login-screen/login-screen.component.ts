@@ -1,92 +1,73 @@
-import { jsDocComment } from '@angular/compiler';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-
 @Component({
   selector: 'app-login-screen',
+  standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './login-screen.component.html',
-  styleUrl: './login-screen.component.css'
+  styleUrl: './login-screen.component.css',
 })
 export class LoginScreenComponent {
   loginForm: FormGroup;
 
-  emailErrorMessage: string;
-  passwordErrorMessage: string;
-  sucessoErrorMessage: string;
-  incorretoErrorMessage: string;
+  emailErrorMessage = '';
+  passwordErrorMessage = '';
+  sucessoMessage = '';
+  erroMessage = '';
 
-
-
+  private readonly apiUrl = 'https://senai-gpt-api.azurewebsites.net/login';
 
   constructor(private fb: FormBuilder) {
-    //Quando a tela iniciar.
-
-    //Inicia o formulario.
-    //Cria o campo obrigatorio de email.
-    //Cria o campo obrigatorio de password.
     this.loginForm = this.fb.group({
-      email: ["", [Validators.required]],
-      password: ["", [Validators.required]]
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
     });
-
-    this.emailErrorMessage = "";
-    this.passwordErrorMessage = "";
-    this.sucessoErrorMessage = "";
-    this.incorretoErrorMessage = "";
-
   }
 
   async onLoginClick() {
-    alert("Botao de login clicado.");
+    this.resetMessages();
 
-    console.log("Email", this.loginForm.value.email);
-    console.log("Password", this.loginForm.value.password);
+    const { email, password } = this.loginForm.value;
 
-    if (this.loginForm.value.email == "") {
-      this.emailErrorMessage = "O campo de e-mail e obrigatorio.";
-      this.passwordErrorMessage = "";
+    if (!email) {
+      this.emailErrorMessage = 'O campo de e-mail é obrigatório.';
       return;
     }
 
-    if (this.loginForm.value.password == "") {
-      this.passwordErrorMessage = "O campo de senha e obrigatorio.";
-      this.emailErrorMessage = "";
+    if (!password) {
+      this.passwordErrorMessage = 'O campo de senha é obrigatório.';
       return;
     }
-    
-    let response = await fetch("https://senai-gpt-api.azurewebsites.net/login", {
-      method: "POST", // Enviar
-      headers: {
-        "Content-type": "application/json"
-      },
-      body: JSON.stringify({
-        email: this.loginForm.value.email,
-        password: this.loginForm.value.password
-      })
-    });
-    console.log("STATUS CODE", response.status);
-    
-    if (response.status >= 200 && response.status <= 299) {
-      this.sucessoErrorMessage = "Login realizado com sucesso";
-      this.incorretoErrorMessage = ""
-      let json = await response.json();
 
-      let meuToken = json.accessToken;
-      let userId = json.user.id;
+    try {
+      const response = await fetch(this.apiUrl, {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
 
-      localStorage.setItem("meuToken", meuToken)
-      localStorage.setItem("meuId", userId)
+      if (response.ok) {
+        const json = await response.json();
 
-      window.location.href = "chat"
-      
-    }else {
-      this.incorretoErrorMessage = "Login deu errado";
-      this.sucessoErrorMessage = ""
+        localStorage.setItem('meuToken', json.accessToken);
+        localStorage.setItem('meuId', json.user.id);
+
+        this.sucessoMessage = 'Login realizado com sucesso!';
+        window.location.href = 'chat';
+      } else {
+        this.erroMessage = 'E-mail ou senha incorretos.';
+      }
+    } catch (err) {
+      console.error('Erro ao fazer login:', err);
+      this.erroMessage = 'Erro ao conectar ao servidor.';
     }
+  }
 
-
-
+  private resetMessages() {
+    this.emailErrorMessage = '';
+    this.passwordErrorMessage = '';
+    this.sucessoMessage = '';
+    this.erroMessage = '';
   }
 }
