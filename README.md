@@ -1,59 +1,47 @@
-# SenaiGptWebAngular
+# SenaiGPT Angular
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.15.
+Bem-vindo ao projeto **SenaiGPT Angular**!  
+Este projeto consiste em uma aplicação front-end desenvolvida com Angular, criada para atuar como interface para o projeto “SenaiGPT” — um sistema que integra funcionalidades de geração de texto.
 
-## Development server
 
-To start a local development server, run:
 
-```bash
-ng serve
-```
+<img height="941" alt="Capturar" src="https://github.com/user-attachments/assets/f3005e7d-7f6d-40f4-9edc-0334ec75bc64" />
+<br> <br>
+<img height="941" alt="eeeeee" src="https://github.com/user-attachments/assets/c2c6cb35-5b22-4244-94c2-3aec7cc96efc" />
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+login = email:front@email.com / password:frontdomina
+---
 
-## Code scaffolding
+## 🎯 Visão Geral
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+O objetivo deste projeto é fornecer uma interface web interativa, responsiva e moderna para o usuário final utilizar o “SenaiGPT”. Entre os principais pontos:
 
-```bash
-ng generate component component-name
-```
+- Front-end desenvolvido com Angular (v19.x).
+- Ambiente pronto para desenvolvimento local, construção (“build”) para produção e testes básicos.  
+- Interface que pode ser utilizada para consumo de APIs, integração com back-end ou serviços de IA (dependendo da implementação futura).  
+- Projeto pensado para ambiente educativo, prototipagem rápida e aprendizado de boas práticas Angular.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## 🚀 Começando
 
-## Building
+### Pré-requisitos  
+- Node.js (versão suportada pelo Angular usado no projeto)  
+- Angular CLI instalado globalmente (ou usar npx)  
+- Git para clonar o repositório
 
-To build the project run:
 
-```bash
-ng build
-```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
-## Running unit tests
+## Instalação
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
 
-```bash
-ng test
-```
+# Clone o repositório
+git clone https://github.com/CesarAugustoNew/Senai_gpt_Angular.git
+cd Senai_gpt_Angular
 
-## Running end-to-end tests
+# Instale as dependências
+npm install
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+# Inicie o projeto no terminal
+npm run start
