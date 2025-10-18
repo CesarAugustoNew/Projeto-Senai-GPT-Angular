@@ -38,7 +38,6 @@ O objetivo deste projeto é fornecer uma interface web interativa, responsiva e 
 
 # Clone o repositório
 git clone https://github.com/CesarAugustoNew/Senai_gpt_Angular.git
-cd Senai_gpt_Angular
 
 # Instale as dependências
 npm install
