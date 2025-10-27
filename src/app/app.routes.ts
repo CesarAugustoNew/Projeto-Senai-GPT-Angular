@@ -5,18 +5,27 @@ import { authGuard } from './auth.guard';
 import { NewUserScreen } from './user-module/new-user-screen/new-user-screen.component';
 
 export const routes: Routes = [
-    
-    {
-        path: "login",
-        loadComponent: () => LoginScreenComponent
-    },
-    {
-        path: "chat",
-        loadComponent: () => ChatScreen,
-        canActivate: [authGuard]
-    },
-    {
-        path: "usuario",
-        loadComponent: () => NewUserScreen
-}
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full' // garante que só redireciona se o path estiver totalmente vazio
+  },
+  {
+    path: 'login',
+    loadComponent: () => LoginScreenComponent
+  },
+  {
+    path: 'chat',
+    loadComponent: () => ChatScreen,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'usuario',
+    loadComponent: () => NewUserScreen
+  },
+  // (opcional) rota coringa para tratar URLs inexistentes
+  {
+    path: '**',
+    redirectTo: 'login'
+  }
 ];
