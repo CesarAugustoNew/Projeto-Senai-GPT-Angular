@@ -1,21 +1,21 @@
-
-.page-container{
+.page-container {
     width: 100vw;
-    height:100vh;
+    height: 100vh;
     display: flex;
 }
 
-.side-bar{
+.side-bar {
     width: 310px;
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border-right: 1px solid #1C1C1C1A ;
+    border-right: 1px solid #1C1C1C1A;
     margin-top: 16px;
     padding: 20px;
 }
-.menu-top{
+
+.menu-top {
     width: 282px;
     height: 236px;
     display: flex;
@@ -24,16 +24,16 @@
     align-items: left;
     font-size: 14px;
     overflow: auto;
- }
+}
 
- .menu-top a {
+.menu-top a {
     text-decoration: none;
     color: black;
     margin-top: 16px;
     margin-left: 20px;
- }
+}
 
- .menu-down{
+.menu-down {
     width: 282px;
     height: 236px;
     display: flex;
@@ -42,38 +42,39 @@
     align-items: left;
     font-size: 14px;
 
- }
+}
 
- .menu-down a{
+.menu-down a {
     text-decoration: none;
     color: black;
     margin-bottom: 4px;
     margin-top: 16px;
     padding-left: 20px;
- }
+}
 
- .button{
-    background-color:#000000;
+.button {
+    background-color: #000000;
     width: 242px;
     height: 40px;
     color: #fffefe;
     display: flex;
     border-radius: 10px;
     font-size: 20px;
-    align-items:  center;
+    align-items: center;
     justify-content: center;
 
 }
 
-.central-panel{
-    width: 100vw;/*Largura da tela*/
+.central-panel {
+    width: 100vw;
+    /*Largura da tela*/
     align-items: center;
     justify-content: center;
     display: flex;
     flex-direction: column;
 }
 
-.logo{
+.logo {
     background-image: url("/imgs/Chat.png");
     width: 446px;
     height: 101px;
@@ -82,19 +83,19 @@
 
 }
 
-.dicas-container{
+.dicas-container {
     display: flex;
     margin-top: 20px;
     max-width: 75%;
 }
 
 
-.dicas-item{
+.dicas-item {
 
     margin-right: 40px;
-    display:  flex;
+    display: flex;
     flex-direction: column;
-    align-items:  center;
+    align-items: center;
 
 }
 
@@ -117,27 +118,24 @@
     align-items: center;
 
 
-    }
+}
 
-.message{
-    height: 40px;
-    width: 40%;
+.message {
+    height: 60px;
+    width: 50%;
     margin-bottom: 70px;
     display: flex;
     gap: 15px;
-    align-items:  center;
+    align-items: center;
     border-radius: 10px;
     border: 1px solid #ddd;
     padding: 15px;
     background-color: #F7F9FB
-
-
-
 }
 
-.message button{
+.message button {
     background: none;
-    border:  none;
+    border: none;
     cursor: pointer;
     font-size: 18px;
 
@@ -146,7 +144,7 @@
 
 }
 
-.message input{
+.message input {
     flex: 1;
     background: none;
     border: none;
@@ -155,61 +153,61 @@
 
 .btn {
     display: flex;
-background: none;
-border: none;
-margin-left: 20px;
-margin-top: 20px;
-font-size: 20px;
+    background: none;
+    border: none;
+    margin-left: 20px;
+    margin-top: 20px;
+    font-size: 20px;
 }
 
 .chat-container {
 
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 80vw;
-  padding-top: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 80vw;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
 
-  
-  height: 90dvh;
-  overflow: auto;
+
+    height: 90dvh;
+    overflow: auto;
 
 }
 
 .chat-header {
 
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 
 }
 
 .chat-messages {
 
-  width: 100%;
+    width: 100%;
 
 }
 
 .chat-container .message-item {
 
-  background-color: #ccc;
-  border-radius: 12px 12px 0 12px;
-  padding: 20px;
-  width: 300px;
-  margin-left: auto;
-  margin-bottom: 20px;
+    background-color: #ccc;
+    border-radius: 12px 12px 0 12px;
+    padding: 20px;
+    width: 300px;
+    margin-left: auto;
+    margin-bottom: 20px;
 
 }
 
 .chat-container .message-item.chatbot {
 
-  background-color: #ccc;
-  border-radius: 12px 12px 12px 0px;
-  padding: 20px;
-  width: 300px;
-  margin-left: unset;
-  color: white;
-  background: #000;
+    background-color: #ccc;
+    border-radius: 12px 12px 12px 0px;
+    padding: 20px;
+    width: 300px;
+    margin-left: unset;
+    color: white;
+    background: #000;
 
 }
