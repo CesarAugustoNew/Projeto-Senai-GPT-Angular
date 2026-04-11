@@ -2,7 +2,7 @@
 
     <aside class="side-bar">
         <div class="menu-top">
-            <button class="button"(click)="novoChat()">+ New chat</button>
+            <button class="button" (click)="novoChat()">+ New chat</button>
 
             @for (chat of chats; track $index){
             <button class="btn" (click)="onChatClick(chat)">
@@ -14,8 +14,15 @@
 
         </div>
         <div class="menu-down">
-    
-            <button (click)="deslogar()"><i class="fa-solid fa-arrow-right-from-bracket" ></i>Log out</button>
+
+            <button class="font"><i class="fa-solid fa-trash"></i>Clear conversations</button>
+            <button class="font"><i class="fa-solid fa-sun"></i>Ligth mode</button>
+            <button class="font"><i class="fa-solid fa-user"></i>My account</button>
+            <button class="font"><i class="fa-solid fa-rotate"></i>Updates & FAQ</button>
+
+            <button (click)="deslogar()" class="font"><i class="fa-solid fa-arrow-right-from-bracket"></i>Log
+                out</button>
+
 
         </div>
 
@@ -69,7 +76,7 @@
         }
 
         @if (chatSelecionado != null) {
-            
+
 
         <div class="chat-container">
 
