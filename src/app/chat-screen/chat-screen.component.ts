@@ -38,7 +38,10 @@ export class ChatScreen {
     Authorization: `Bearer ${localStorage.getItem('meuToken')}`,
   };
 
-  constructor(private http: HttpClient, private cd: ChangeDetectorRef) {}
+  constructor(
+    private http: HttpClient,
+    private cd: ChangeDetectorRef,
+  ) {}
 
   ngOnInit() {
     this.getChats();
@@ -46,9 +49,12 @@ export class ChatScreen {
 
   async getChats() {
     try {
-      const response = (await firstValueFrom(
-        this.http.get<IChat[]>(`${this.apiBase}/chats`, { headers: this.headers })
-      )) || [];
+      const response =
+        (await firstValueFrom(
+          this.http.get<IChat[]>(`${this.apiBase}/chats`, {
+            headers: this.headers,
+          }),
+        )) || [];
 
       const userId = localStorage.getItem('meuId');
       this.chats = response.filter((chat) => chat.userId === userId);
@@ -62,11 +68,15 @@ export class ChatScreen {
   async onChatClick(chat: IChat) {
     try {
       this.chatSelecionado = chat;
-      this.messages = (await firstValueFrom(
-        this.http.get<IMessage[]>(`${this.apiBase}/messages?chatId=${chat.id}`, {
-          headers: this.headers,
-        })
-      )) || [];
+      this.messages =
+        (await firstValueFrom(
+          this.http.get<IMessage[]>(
+            `${this.apiBase}/messages?chatId=${chat.id}`,
+            {
+              headers: this.headers,
+            },
+          ),
+        )) || [];
 
       this.cd.detectChanges();
     } catch (err) {
@@ -87,7 +97,7 @@ export class ChatScreen {
       await firstValueFrom(
         this.http.post(`${this.apiBase}/messages`, newMessageUser, {
           headers: this.headers,
-        })
+        }),
       );
 
       await this.onChatClick(this.chatSelecionado);
@@ -98,7 +108,11 @@ export class ChatScreen {
           {
             contents: [
               {
-                parts: [{ text: `${this.userMessage.value}. Me dê uma resposta objetiva` }],
+                parts: [
+                  {
+                    text: `${this.userMessage.value}. Me dê uma resposta objetiva`,
+                  },
+                ],
               },
             ],
           },
@@ -107,18 +121,22 @@ export class ChatScreen {
               'content-type': 'application/json',
               'x-goog-api-key': 'AIzaSyDV2HECQZLpWJrqCKEbuq7TT5QPKKdLOdo',
             },
-          }
-        )
+          },
+        ),
       );
 
       const newAnswerIA: Partial<IMessage> = {
         chatId: this.chatSelecionado.id,
         userId: 'chatbot',
-        text: respostaIA?.candidates?.[0]?.content?.parts?.[0]?.text || '[Sem resposta]',
+        text:
+          respostaIA?.candidates?.[0]?.content?.parts?.[0]?.text ||
+          '[Sem resposta]',
       };
 
       await firstValueFrom(
-        this.http.post(`${this.apiBase}/messages`, newAnswerIA, { headers: this.headers })
+        this.http.post(`${this.apiBase}/messages`, newAnswerIA, {
+          headers: this.headers,
+        }),
       );
 
       await this.onChatClick(this.chatSelecionado);
@@ -142,7 +160,9 @@ export class ChatScreen {
       };
 
       const novoChatResponse = (await firstValueFrom(
-        this.http.post<IChat>(`${this.apiBase}/chats`, novoChat, { headers: this.headers })
+        this.http.post<IChat>(`${this.apiBase}/chats`, novoChat, {
+          headers: this.headers,
+        }),
       )) as IChat;
 
       await this.getChats();
@@ -155,5 +175,48 @@ export class ChatScreen {
   deslogar() {
     localStorage.clear();
     window.location.href = 'login';
+  }
+
+  async clearConversations() {
+    const confirmar = confirm('Deseja apagar todas as conversas?');
+    if (!confirmar) return;
+
+    try {
+      const chatsParaDeletar = [...this.chats];
+
+      for (const chat of chatsParaDeletar) {
+        // 1. Buscar mensagens
+        const mensagens = await firstValueFrom(
+          this.http.get<IMessage[]>(
+            `${this.apiBase}/messages?chatId=${chat.id}`,
+            { headers: this.headers },
+          ),
+        );
+
+        await Promise.all(
+          mensagens.map((msg) =>
+            firstValueFrom(
+              this.http.delete(`${this.apiBase}/messages/${msg.id}`, {
+                headers: this.headers,
+              }),
+            ),
+          ),
+        );
+
+        await firstValueFrom(
+          this.http.delete(`${this.apiBase}/chats/${chat.id}`, {
+            headers: this.headers,
+          }),
+        );
+      }
+
+      this.chats = [];
+      this.chatSelecionado = null;
+      this.messages = [];
+
+      this.cd.detectChanges();
+    } catch (err) {
+      console.error('Erro ao limpar conversas:', err);
+    }
   }
 }

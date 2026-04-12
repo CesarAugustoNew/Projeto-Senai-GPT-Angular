@@ -199,20 +199,3 @@
     color: white;
     background: #000;
 }
-
-.textchat {
-    position: fixed;
-    bottom: 70px;
-    left: 55%;
-    transform: translateX(-50%);
-
-    width: 50%;
-    height: 56px;
-
-    border-radius: 16px;
-    background-color: #F7F9FB;
-    border: 1px solid #ddd;
-
-    padding: 0 20px;
-    outline: none;
-}
