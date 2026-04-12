@@ -185,7 +185,6 @@ export class ChatScreen {
       const chatsParaDeletar = [...this.chats];
 
       for (const chat of chatsParaDeletar) {
-        // 1. Buscar mensagens
         const mensagens = await firstValueFrom(
           this.http.get<IMessage[]>(
             `${this.apiBase}/messages?chatId=${chat.id}`,
