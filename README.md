@@ -7,7 +7,7 @@ Este projeto consiste em uma aplicação front-end desenvolvida com Angular, cri
 
 <img height="941" alt="Capturar" src="https://github.com/user-attachments/assets/f3005e7d-7f6d-40f4-9edc-0334ec75bc64" />
 <br> <br>
-<img height="941" alt="eeeeee" src="https://github.com/user-attachments/assets/c2c6cb35-5b22-4244-94c2-3aec7cc96efc" />
+<img width="1919" height="948" alt="image" src="https://github.com/user-attachments/assets/893ac852-53e3-4548-9eda-3db3e9668dc1" />
 
 login = email:front@email.com / password:frontdomina
 ---
