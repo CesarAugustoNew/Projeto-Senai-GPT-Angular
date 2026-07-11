@@ -17,25 +17,17 @@
 
 .menu-top {
     width: 282px;
-    height: 236px;
+    max-height: 55vh;
     display: flex;
     background-color: white;
     flex-direction: column;
     align-items: left;
     font-size: 14px;
-    overflow: auto;
-}
-
-.menu-top a {
-    text-decoration: none;
-    color: black;
-    margin-top: 16px;
-    margin-left: 20px;
+    overflow-y: auto;
 }
 
 .menu-down {
     width: 282px;
-    height: 236px;
     display: flex;
     background-color: white;
     flex-direction: column;
@@ -43,15 +35,6 @@
     font-size: 14px;
 }
 
-.menu-down a {
-    text-decoration: none;
-    color: black;
-    margin-bottom: 4px;
-    margin-top: 16px;
-    padding-left: 20px;
-}
-
-.btn,
 .font {
     display: flex;
     align-items: center;
@@ -61,6 +44,15 @@
     text-align: left;
     border-style: none;
     background-color: white;
+    font-size: 1.05rem;
+    font-weight: 400;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color .15s ease;
+}
+
+.font:hover {
+    background-color: #f2f2f2;
 }
 
 .button {
@@ -73,11 +65,7 @@
     font-size: 20px;
     align-items: center;
     justify-content: center;
-}
-
-.font {
-    font-size: 1.5rem;
-    font-weight: 400;
+    cursor: pointer;
 }
 
 .central-panel {
@@ -111,10 +99,7 @@
 }
 
 .dicas-item p {
-    padding-top: 24px;
-    padding-left: 8px;
-    padding-right: 8px;
-    padding-bottom: 24px;
+    padding: 24px 8px;
     background-color: #F7F9FB;
     margin-bottom: 10px;
     border-radius: 10px;
@@ -131,7 +116,7 @@
 .message {
     height: 60px;
     width: 50%;
-    margin-bottom: 70px;
+    margin-bottom: 30px;
     display: flex;
     gap: 15px;
     align-items: center;
@@ -148,6 +133,11 @@
     font-size: 18px;
 }
 
+.message button[disabled] {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
 .message input {
     flex: 1;
     background: none;
@@ -155,13 +145,61 @@
     outline: none;
 }
 
+/*
+  Cada chat na lateral agora é um item flex com duas áreas: o título
+  (que abre a conversa) e o ícone de lixeira (que apaga a conversa).
+  Antes, o botão inteiro só chamava onChatClick — a lixeira nunca
+  tinha ação própria de exclusão.
+*/
 .btn {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
     background: none;
     border: none;
-    margin-left: 20px;
-    margin-top: 20px;
-    font-size: 20px;
+    margin-top: 6px;
+    padding: 10px 12px;
+    font-size: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    color: #1c1c1c;
+    transition: background-color .15s ease;
+}
+
+.btn:hover {
+    background-color: #f2f2f2;
+}
+
+.btn--active {
+    background-color: #ebebeb;
+    font-weight: 600;
+}
+
+.btn__title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.btn__delete {
+    color: #9a9a9a;
+    padding: 6px;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.btn__delete:hover {
+    color: #e33636;
+    background-color: rgba(227, 54, 54, 0.1);
+}
+
+.empty-chats {
+    font-size: 13px;
+    color: #888;
+    padding: 10px 12px;
 }
 
 .chat-container {
@@ -171,31 +209,129 @@
     width: 80vw;
     padding: 20px;
     height: 90dvh;
-    overflow: auto;
 }
 
 .chat-header {
     margin-bottom: 20px;
+    width: 100%;
 }
 
 .chat-messages {
     width: 100%;
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 8px;
+    scroll-behavior: smooth;
 }
 
 .chat-container .message-item {
-    background-color: #ccc;
+    background-color: #ececec;
     border-radius: 12px 12px 0 12px;
-    padding: 20px;
-    width: 300px;
+    padding: 14px 18px;
+    max-width: min(500px, 70%);
+    width: fit-content;
     margin-left: auto;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+    line-height: 1.5;
+    word-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 .chat-container .message-item.chatbot {
     border-radius: 12px 12px 12px 0px;
-    padding: 20px;
-    width: 300px;
     margin-left: unset;
     color: white;
-    background: #000;
+    background: #1c1c1c;
+}
+
+.message-item--loading {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 16px 20px;
+}
+
+.typing-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #fff;
+    opacity: 0.4;
+    animation: typing-bounce 1s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(2) { animation-delay: 0.15s; }
+.typing-dot:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes typing-bounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* ===================== Modo escuro ===================== */
+
+:host-context(.dark-theme) .page-container,
+:host-context(.dark-theme) .central-panel {
+    background-color: #14141a;
+    color: #f3f5f8;
+}
+
+:host-context(.dark-theme) .side-bar {
+    border-color: #2a2a33;
+}
+
+:host-context(.dark-theme) .menu-top,
+:host-context(.dark-theme) .menu-down {
+    background-color: #14141a;
+}
+
+:host-context(.dark-theme) .font,
+:host-context(.dark-theme) .btn {
+    background-color: #14141a;
+    color: #f3f5f8;
+}
+
+:host-context(.dark-theme) .font:hover,
+:host-context(.dark-theme) .btn:hover {
+    background-color: #23232c;
+}
+
+:host-context(.dark-theme) .btn--active {
+    background-color: #2a2a35;
+}
+
+:host-context(.dark-theme) .button {
+    background-color: #f3f5f8;
+    color: #14141a;
+}
+
+:host-context(.dark-theme) .dicas-item p {
+    background-color: #1e1e26;
+    color: #f3f5f8;
+}
+
+:host-context(.dark-theme) .message {
+    background-color: #1e1e26;
+    border-color: #2a2a33;
+}
+
+:host-context(.dark-theme) .message input {
+    color: #f3f5f8;
+}
+
+:host-context(.dark-theme) .message button {
+    color: #f3f5f8;
+}
+
+:host-context(.dark-theme) .chat-container .message-item {
+    background-color: #2a2a33;
+    color: #f3f5f8;
+}
+
+:host-context(.dark-theme) .chat-container .message-item.chatbot {
+    background-color: #000;
+}
+
+:host-context(.dark-theme) .empty-chats {
+    color: #9a9a9a;
 }

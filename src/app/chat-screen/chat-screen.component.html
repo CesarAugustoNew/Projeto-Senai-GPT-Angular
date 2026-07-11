@@ -4,20 +4,34 @@
         <div class="menu-top">
             <button class="button" (click)="novoChat()">+ New chat</button>
 
-            @for (chat of chats; track $index){
-            <button class="btn" (click)="onChatClick(chat)">
-                <i class="fa-solid fa-trash-can"></i>
-                {{ chat.chatTitle }}
+            @for (chat of chats; track chat.id){
+            <button
+                class="btn"
+                [class.btn--active]="chatSelecionado?.id === chat.id"
+                (click)="onChatClick(chat)"
+            >
+                <span class="btn__title">{{ chat.chatTitle }}</span>
+                <i
+                    class="fa-solid fa-trash-can btn__delete"
+                    title="Apagar esta conversa"
+                    (click)="deletarChat(chat, $event)"
+                ></i>
             </button>
             }
 
+            @if (chats.length === 0) {
+            <p class="empty-chats">Nenhuma conversa ainda. Clique em "+ New chat" para começar.</p>
+            }
 
         </div>
         <div class="menu-down">
 
             <button class="font" (click)="clearConversations()"><i class="fa-solid fa-trash"></i>Clear
                 conversations</button>
-            <button class="font"><i class="fa-solid fa-sun"></i>Ligth mode</button>
+            <button class="font" (click)="theme.toggle()">
+                <i class="fa-solid" [class.fa-sun]="theme.isDark()" [class.fa-moon]="!theme.isDark()"></i>
+                {{ theme.isDark() ? 'Light mode' : 'Dark mode' }}
+            </button>
             <button class="font"><i class="fa-solid fa-user"></i>My account</button>
             <button class="font"><i class="fa-solid fa-rotate"></i>Updates & FAQ</button>
 
@@ -88,10 +102,18 @@
 
             </div>
 
-            <div class="chat-messages">
-                @for (msg of messages; track $index){
+            <div class="chat-messages" #chatMessagesEl>
+                @for (msg of messages; track msg.id){
                 <p class="message-item" [class.chatbot]="msg.userId == 'chatbot'">{{ msg.text }}</p>
 
+                }
+
+                @if (enviandoMensagem) {
+                <p class="message-item chatbot message-item--loading">
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                </p>
                 }
             </div>
 
@@ -102,13 +124,22 @@
                 <i class="fa-solid fa-image"></i>
             </button>
 
-            <input [formControl]="userMessage" type="text" placeholder="Type your message">
+            <input
+                [formControl]="userMessage"
+                type="text"
+                placeholder="Type your message"
+                (keydown)="onMessageKeydown($event)"
+            >
             <button aria-label="Send voice message">
                 <i class="fa-solid fa-microphone"></i>
             </button>
 
-            <button aria-label="Send message">
-                <i class="fa-solid fa-paper-plane" (click)="sendMessage()"></i>
+            <button
+                aria-label="Send message"
+                (click)="sendMessage()"
+                [disabled]="!userMessage.value || enviandoMensagem"
+            >
+                <i class="fa-solid fa-paper-plane"></i>
             </button>
         </div>
         }

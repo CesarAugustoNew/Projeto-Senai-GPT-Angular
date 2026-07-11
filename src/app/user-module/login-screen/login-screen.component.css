@@ -91,6 +91,60 @@
   transform: translateY(17px);
 }
 
+.cadastro-link {
+  margin-top: 24px;
+  font-size: 14px;
+  color: #444;
+}
+
+.cadastro-link a {
+  color: #000;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.theme-toggle__fixed {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+}
+
+/* Modo escuro */
+
+:host-context(.dark-theme) .page-container {
+  background-color: #14141a;
+}
+
+:host-context(.dark-theme) .login-container {
+  background-color: #14141a;
+  color: #f3f5f8;
+}
+
+:host-context(.dark-theme) .inpt {
+  background-color: #1e1e26;
+  border-color: #3a3a3a;
+  color: #f3f5f8;
+}
+
+:host-context(.dark-theme) .inpt::placeholder {
+  color: #9aa0ab;
+}
+
+:host-context(.dark-theme) .btt {
+  background-color: #f3f5f8;
+  color: #14141a;
+}
+
+:host-context(.dark-theme) .cadastro-link {
+  color: #c7ccd6;
+}
+
+:host-context(.dark-theme) .cadastro-link a {
+  color: #fff;
+}
+
 /* Media Query */
 @media screen and (max-width: 1366px) {
   /* Ate 1366px e um monitor pequeno */

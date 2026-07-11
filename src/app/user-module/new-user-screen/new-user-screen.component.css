@@ -67,6 +67,40 @@ cursor: pointer;
     cursor: pointer;
 }
 
+.theme-toggle__fixed {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+}
+
+/* Modo escuro */
+
+:host-context(.dark-theme) .login-container {
+  background-color: #14141a;
+  color: #f3f5f8;
+}
+
+:host-context(.dark-theme) .inpute {
+  background-color: #1e1e26;
+  border-color: #3a3a3a;
+  color: #f3f5f8;
+}
+
+:host-context(.dark-theme) .inpute::placeholder {
+  color: #9aa0ab;
+}
+
+:host-context(.dark-theme) .butone {
+  background-color: #f3f5f8;
+  color: #14141a;
+}
+
+:host-context(.dark-theme) .button3 {
+  background-color: transparent;
+  color: #7aa2ff;
+}
+
 /* Media Query */
 @media screen and (max-width: 1366px) {
   /* Ate 1366px e um monitor pequeno */

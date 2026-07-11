@@ -1,5 +1,7 @@
 <main class="page-container">
 
+  <app-theme-toggle class="theme-toggle__fixed"></app-theme-toggle>
+
   <div class="robo-image">
 
   </div>
@@ -21,7 +23,7 @@
 
     <button class="butone" (click)="onEnterClick()">Entrar</button>
 
-    <button class="button3">Clique aqui para fazer o login</button>
+    <button class="button3" routerLink="/login">Clique aqui para fazer o login</button>
 
     <span class="aprove-mesage">{{sucessLogin}}</span>
     <span class="error-mesage">{{errorLogin}}</span>

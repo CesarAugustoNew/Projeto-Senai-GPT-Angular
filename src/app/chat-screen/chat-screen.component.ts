@@ -1,8 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
+import { ThemeService } from '../theme.service';
 
 interface IChat {
   id: number;
@@ -24,11 +31,19 @@ interface IMessage {
   templateUrl: './chat-screen.component.html',
   styleUrl: './chat-screen.component.css',
 })
-export class ChatScreen {
+export class ChatScreen implements AfterViewChecked {
   chats: IChat[] = [];
   chatSelecionado: IChat | null = null;
   messages: IMessage[] = [];
   userMessage = new FormControl('');
+
+  // Estado de carregamento: dá feedback visual enquanto a mensagem
+  // é enviada e a IA "pensa", em vez de a tela simplesmente não
+  // reagir a nada até a resposta chegar.
+  enviandoMensagem = false;
+
+  @ViewChild('chatMessagesEl') private chatMessagesEl?: ElementRef<HTMLDivElement>;
+  private deveRolarParaFinal = false;
 
   private readonly apiBase = 'https://senai-gpt-api.azurewebsites.net';
   private readonly aiApiUrl =
@@ -41,10 +56,25 @@ export class ChatScreen {
   constructor(
     private http: HttpClient,
     private cd: ChangeDetectorRef,
+    public theme: ThemeService,
   ) {}
 
   ngOnInit() {
     this.getChats();
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.deveRolarParaFinal) {
+      this.rolarParaFinal();
+      this.deveRolarParaFinal = false;
+    }
+  }
+
+  private rolarParaFinal(): void {
+    const el = this.chatMessagesEl?.nativeElement;
+    if (el) {
+      el.scrollTop = el.scrollHeight;
+    }
   }
 
   async getChats() {
@@ -78,6 +108,7 @@ export class ChatScreen {
           ),
         )) || [];
 
+      this.deveRolarParaFinal = true;
       this.cd.detectChanges();
     } catch (err) {
       console.error('Erro ao buscar mensagens:', err);
@@ -85,7 +116,9 @@ export class ChatScreen {
   }
 
   async sendMessage() {
-    if (!this.chatSelecionado || !this.userMessage.value) return;
+    if (!this.chatSelecionado || !this.userMessage.value || this.enviandoMensagem) return;
+
+    this.enviandoMensagem = true;
 
     try {
       const newMessageUser: Partial<IMessage> = {
@@ -100,6 +133,7 @@ export class ChatScreen {
         }),
       );
 
+      this.userMessage.setValue('');
       await this.onChatClick(this.chatSelecionado);
 
       const respostaIA: any = await firstValueFrom(
@@ -110,7 +144,7 @@ export class ChatScreen {
               {
                 parts: [
                   {
-                    text: `${this.userMessage.value}. Me dê uma resposta objetiva`,
+                    text: `${newMessageUser.text}. Me dê uma resposta objetiva`,
                   },
                 ],
               },
@@ -140,9 +174,19 @@ export class ChatScreen {
       );
 
       await this.onChatClick(this.chatSelecionado);
-      this.userMessage.setValue('');
     } catch (err) {
       console.error('Erro ao enviar mensagem:', err);
+      alert('Não foi possível enviar a mensagem. Tente novamente.');
+    } finally {
+      this.enviandoMensagem = false;
+      this.cd.detectChanges();
+    }
+  }
+
+  onMessageKeydown(event: KeyboardEvent) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.sendMessage();
     }
   }
 
@@ -175,6 +219,60 @@ export class ChatScreen {
   deslogar() {
     localStorage.clear();
     window.location.href = 'login';
+  }
+
+  /*
+    BUG CORRIGIDO: o ícone de lixeira ao lado de cada chat na barra
+    lateral nunca teve uma ação de exclusão de verdade — o botão
+    inteiro (ícone incluído) só chamava onChatClick(chat), ou seja,
+    clicar na "lixeira" apenas abria o chat, nunca o apagava. Só
+    existia a opção de apagar TODAS as conversas de uma vez.
+
+    Agora o ícone tem sua própria ação: apaga as mensagens do chat e
+    depois o chat em si, atualiza a lista local e, se o chat apagado
+    era o que estava aberto, limpa a área de mensagens.
+  */
+  async deletarChat(chat: IChat, event: Event) {
+    event.stopPropagation();
+
+    const confirmar = confirm(`Apagar a conversa "${chat.chatTitle}"?`);
+    if (!confirmar) return;
+
+    try {
+      const mensagens = await firstValueFrom(
+        this.http.get<IMessage[]>(`${this.apiBase}/messages?chatId=${chat.id}`, {
+          headers: this.headers,
+        }),
+      );
+
+      await Promise.all(
+        (mensagens || []).map((msg) =>
+          firstValueFrom(
+            this.http.delete(`${this.apiBase}/messages/${msg.id}`, {
+              headers: this.headers,
+            }),
+          ),
+        ),
+      );
+
+      await firstValueFrom(
+        this.http.delete(`${this.apiBase}/chats/${chat.id}`, {
+          headers: this.headers,
+        }),
+      );
+
+      this.chats = this.chats.filter((c) => c.id !== chat.id);
+
+      if (this.chatSelecionado?.id === chat.id) {
+        this.chatSelecionado = null;
+        this.messages = [];
+      }
+
+      this.cd.detectChanges();
+    } catch (err) {
+      console.error('Erro ao apagar o chat:', err);
+      alert('Não foi possível apagar essa conversa. Tente novamente.');
+    }
   }
 
   async clearConversations() {

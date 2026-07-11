@@ -6,3 +6,16 @@
   box-sizing: border-box; /* Muda a estrutura de espacamento */
   font-family: "Inter"; /* testetes */
 }
+
+html, body {
+  height: 100%;
+}
+
+body {
+  transition: background-color .2s ease, color .2s ease;
+}
+
+/* Aplicado pelo ThemeService na tag <html> */
+html.dark-theme body {
+  background-color: #14141a;
+}

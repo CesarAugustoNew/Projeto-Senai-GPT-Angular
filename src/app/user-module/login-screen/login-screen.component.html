@@ -1,6 +1,8 @@
 <header></header>
 
 <main class="page-container">
+    <app-theme-toggle class="theme-toggle__fixed"></app-theme-toggle>
+
     <div class="robo-image">
         <h1></h1>
     </div>
@@ -17,6 +19,10 @@
         <button class="btt" (click)="onLoginClick()">Entrar</button>
         <span class="incorreto-message">{{this.incorretoErrorMessage}}</span>
         <span class="sucesso-message">{{this.sucessoMessage}}</span>
+
+        <p class="cadastro-link">
+            Ainda não tem uma conta? <a routerLink="/usuario">Cadastre-se</a>
+        </p>
 
     </div>
 
