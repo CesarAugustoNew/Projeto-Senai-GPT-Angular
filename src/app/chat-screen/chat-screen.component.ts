@@ -10,6 +10,7 @@ import {
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { ThemeService } from '../theme.service';
+import { LogoComponent } from '../logo/logo.component';
 
 interface IChat {
   id: number;
@@ -27,7 +28,7 @@ interface IMessage {
 @Component({
   selector: 'app-chat-screen',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, LogoComponent],
   templateUrl: './chat-screen.component.html',
   styleUrl: './chat-screen.component.css',
 })
@@ -41,6 +42,16 @@ export class ChatScreen implements AfterViewChecked {
   // é enviada e a IA "pensa", em vez de a tela simplesmente não
   // reagir a nada até a resposta chegar.
   enviandoMensagem = false;
+
+  // No celular a barra lateral vira uma gaveta que abre pelo botão de menu.
+  sidebarAberta = false;
+
+  // Perguntas da tela inicial: clicar em uma cria a conversa e já envia.
+  readonly exemplos = [
+    'Explique a Lei de Ohm com um exemplo do dia a dia',
+    'Como faço uma requisição HTTP em JavaScript?',
+    'Monte um plano de estudos de lógica de programação para 2 semanas',
+  ];
 
   @ViewChild('chatMessagesEl') private chatMessagesEl?: ElementRef<HTMLDivElement>;
   private deveRolarParaFinal = false;
@@ -96,6 +107,8 @@ export class ChatScreen implements AfterViewChecked {
   }
 
   async onChatClick(chat: IChat) {
+    this.sidebarAberta = false;
+
     try {
       this.chatSelecionado = chat;
       this.messages =
@@ -191,15 +204,29 @@ export class ChatScreen implements AfterViewChecked {
   }
 
   async novoChat() {
-    const nomeChat = prompt('Digite o nome do novo chat:');
-    if (!nomeChat?.trim()) {
-      alert('Nome inválido.');
+    const nomeChat = prompt('Nome da nova conversa:');
+    if (nomeChat === null) return; // usuário cancelou
+
+    if (!nomeChat.trim()) {
+      alert('Dê um nome para a conversa.');
       return;
     }
 
+    await this.criarChat(nomeChat.trim());
+  }
+
+  async comecarComExemplo(texto: string) {
+    const criado = await this.criarChat(texto);
+    if (!criado) return;
+
+    this.userMessage.setValue(texto);
+    await this.sendMessage();
+  }
+
+  private async criarChat(titulo: string): Promise<boolean> {
     try {
       const novoChat: Partial<IChat> = {
-        chatTitle: nomeChat,
+        chatTitle: titulo,
         userId: localStorage.getItem('meuId')!,
       };
 
@@ -211,8 +238,11 @@ export class ChatScreen implements AfterViewChecked {
 
       await this.getChats();
       await this.onChatClick(novoChatResponse);
+      return true;
     } catch (err) {
       console.error('Erro ao criar novo chat:', err);
+      alert('Não foi possível criar a conversa. Tente novamente.');
+      return false;
     }
   }
 
@@ -276,7 +306,7 @@ export class ChatScreen implements AfterViewChecked {
   }
 
   async clearConversations() {
-    const confirmar = confirm('Deseja apagar todas as conversas?');
+    const confirmar = confirm('Apagar todas as conversas? Isso não pode ser desfeito.');
     if (!confirmar) return;
 
     try {

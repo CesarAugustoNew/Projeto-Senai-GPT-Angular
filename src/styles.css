@@ -1,10 +1,61 @@
-* {
-  /* Todos os elementos */
+/*
+  Tokens de cor do SenaiGPT. Os componentes usam só essas variáveis,
+  então o modo escuro é apenas a redefinição delas em html.dark-theme
+  (classe aplicada pelo ThemeService).
+*/
+:root {
+  --ink: #1c1c1c;            /* mesma tinta do texto do logo */
+  --ink-muted: #5e636e;
+  --ink-faint: #8a8f99;
 
-  padding: 0px; /* Margem interna */
-  margin: 0px; /* Margem externa */
-  box-sizing: border-box; /* Muda a estrutura de espacamento */
-  font-family: "Inter"; /* testetes */
+  --surface: #ffffff;        /* área principal */
+  --surface-sunken: #f3f4f6; /* barra lateral */
+  --surface-raised: #eef0f3; /* balão do usuário, hover */
+  --line: #e3e5e9;
+
+  --brand: #f62424;          /* vermelho do símbolo */
+  --brand-text: #c8161b;     /* vermelho legível em texto pequeno */
+  --brand-soft: rgba(246, 36, 36, 0.1);
+  --success: #12804a;
+
+  --primary-bg: #1c1c1c;
+  --primary-fg: #ffffff;
+
+  --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Archivo", "Inter", system-ui, sans-serif;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+
+  color-scheme: light;
+}
+
+html.dark-theme {
+  --ink: #ecedef;
+  --ink-muted: #a3a8b2;
+  --ink-faint: #767b86;
+
+  --surface: #202125;
+  --surface-sunken: #18191c;
+  --surface-raised: #2b2d32;
+  --line: #2f3137;
+
+  --brand: #ff4747;
+  --brand-text: #ff6b6b;
+  --brand-soft: rgba(255, 71, 71, 0.14);
+  --success: #4cc38a;
+
+  --primary-bg: #ecedef;
+  --primary-fg: #18191c;
+
+  color-scheme: dark;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 html, body {
@@ -12,10 +63,34 @@ html, body {
 }
 
 body {
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink);
+  background-color: var(--surface);
+  -webkit-font-smoothing: antialiased;
   transition: background-color .2s ease, color .2s ease;
 }
 
-/* Aplicado pelo ThemeService na tag <html> */
-html.dark-theme body {
-  background-color: #14141a;
+button, input, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

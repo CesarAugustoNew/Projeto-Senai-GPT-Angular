@@ -1,36 +1,87 @@
-<main class="page-container">
+<main class="auth">
 
-  <app-theme-toggle class="theme-toggle__fixed"></app-theme-toggle>
+  <div class="auth__photo" aria-hidden="true"></div>
 
-  <div class="robo-image">
+  <section class="auth__panel">
+    <app-theme-toggle class="auth__theme"></app-theme-toggle>
 
-  </div>
+    <form class="auth__form" [formGroup]="loginForm" (ngSubmit)="onEnterClick()">
+      <app-logo class="auth__logo"></app-logo>
 
-  <div class="login-container" [formGroup]="loginForm">
-    <img class="logo" src="imgs/Chat.png" alt="logo">
-    <h1 class="titulo">Crie um novo usuário</h1>
+      <h1 class="auth__title">Criar conta</h1>
+      <p class="auth__lead">Suas conversas ficam salvas para você voltar a elas depois.</p>
 
-    <input class="inpute" type="text" placeholder="Insira seu nome" formControlName="nome">
-    <span class="error-mesage">{{nomeErrorMessage}}</span>
+      <div class="field">
+        <label for="cadastro-nome">Nome</label>
+        <input
+          id="cadastro-nome"
+          type="text"
+          autocomplete="name"
+          formControlName="nome"
+          [class.is-invalid]="nomeErrorMessage"
+        >
+        @if (nomeErrorMessage) {
+        <p class="field__error">{{ nomeErrorMessage }}</p>
+        }
+      </div>
 
-    <input class="inpute" type="text" placeholder="Insira o e-mail" formControlName="email">
-    <span class="error-mesage">{{emailErrorMessage}}</span>
+      <div class="field">
+        <label for="cadastro-email">E-mail</label>
+        <input
+          id="cadastro-email"
+          type="email"
+          autocomplete="email"
+          placeholder="voce@email.com"
+          formControlName="email"
+          [class.is-invalid]="emailErrorMessage"
+        >
+        @if (emailErrorMessage) {
+        <p class="field__error">{{ emailErrorMessage }}</p>
+        }
+      </div>
 
-    <input class="inpute" type="password" placeholder="Insira a senha" formControlName="password">
-    <span class="error-mesage">{{passwordErrorMessage}}</span>
+      <div class="field">
+        <label for="cadastro-senha">Senha</label>
+        <input
+          id="cadastro-senha"
+          type="password"
+          autocomplete="new-password"
+          formControlName="password"
+          aria-describedby="cadastro-senha-dica"
+          [class.is-invalid]="passwordErrorMessage"
+        >
+        <p class="field__hint" id="cadastro-senha-dica">Mínimo de 6 caracteres, com pelo menos uma letra maiúscula.</p>
+      </div>
 
-    <input class="inpute" type="password" placeholder="Confirme a senha" formControlName="password2">
+      <div class="field">
+        <label for="cadastro-senha2">Confirme a senha</label>
+        <input
+          id="cadastro-senha2"
+          type="password"
+          autocomplete="new-password"
+          formControlName="password2"
+          [class.is-invalid]="passwordErrorMessage"
+        >
+        @if (passwordErrorMessage) {
+        <p class="field__error">{{ passwordErrorMessage }}</p>
+        }
+      </div>
 
-    <button class="butone" (click)="onEnterClick()">Entrar</button>
+      <button class="auth__submit" type="submit" [disabled]="enviando">
+        {{ enviando ? 'Criando conta…' : 'Criar conta' }}
+      </button>
 
-    <button class="button3" routerLink="/login">Clique aqui para fazer o login</button>
+      @if (errorMessage) {
+      <p class="auth__status auth__status--error" role="alert">{{ errorMessage }}</p>
+      }
+      @if (sucessMessage) {
+      <p class="auth__status auth__status--success" role="status">{{ sucessMessage }}</p>
+      }
 
-    <span class="aprove-mesage">{{sucessLogin}}</span>
-    <span class="error-mesage">{{errorLogin}}</span>
-  </div>
+      <p class="auth__switch">
+        Já tem uma conta? <a routerLink="/login">Entrar</a>
+      </p>
+    </form>
+  </section>
 
 </main>
-
-<footer>
-  <!-- Rodapé vazio por enquanto -->
-</footer>

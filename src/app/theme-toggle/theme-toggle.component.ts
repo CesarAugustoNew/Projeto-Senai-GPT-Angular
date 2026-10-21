@@ -25,26 +25,17 @@ import { ThemeService } from '../theme.service';
       height: 40px;
 
       border-radius: 50%;
-      border: 1px solid #ccc;
-      background-color: transparent;
-      color: #525866;
+      border: 1px solid var(--line);
+      background-color: var(--surface);
+      color: var(--ink-muted);
       font-size: 16px;
-      cursor: pointer;
 
       transition: background-color .2s ease, color .2s ease, border-color .2s ease;
     }
 
     .theme-toggle:hover {
-      background-color: rgba(0, 0, 0, 0.06);
-    }
-
-    :host-context(.dark-theme) .theme-toggle {
-      border-color: #3a3a3a;
-      color: #f3f5f8;
-    }
-
-    :host-context(.dark-theme) .theme-toggle:hover {
-      background-color: rgba(255, 255, 255, 0.08);
+      background-color: var(--surface-raised);
+      color: var(--ink);
     }
   `]
 })

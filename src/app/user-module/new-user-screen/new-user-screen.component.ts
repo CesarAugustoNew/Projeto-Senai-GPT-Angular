@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ThemeToggleComponent } from '../../theme-toggle/theme-toggle.component';
+import { LogoComponent } from '../../logo/logo.component';
 
 @Component({
   selector: 'app-new-user-screen',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, ThemeToggleComponent],
+  imports: [ReactiveFormsModule, RouterLink, ThemeToggleComponent, LogoComponent],
   templateUrl: './new-user-screen.component.html',
-  styleUrl: './new-user-screen.component.css',
+  styleUrl: '../auth-screen.css',
 })
 export class NewUserScreen {
   loginForm: FormGroup;
@@ -18,10 +19,9 @@ export class NewUserScreen {
   passwordErrorMessage = '';
   sucessMessage = '';
   errorMessage = '';
+  enviando = false;
 
   private readonly apiUrl = 'https://senai-gpt-api.azurewebsites.net/users';
-sucessLogin: any;
-errorLogin: any;
 
   constructor(private fb: FormBuilder) {
     this.loginForm = this.fb.group({
@@ -65,6 +65,8 @@ errorLogin: any;
       return;
     }
 
+    this.enviando = true;
+
     try {
       const response = await fetch(this.apiUrl, {
         method: 'POST',
@@ -80,7 +82,9 @@ errorLogin: any;
       }
     } catch (err) {
       console.error('Erro de requisição:', err);
-      this.errorMessage = 'Erro de conexão. Verifique sua internet.';
+      this.errorMessage = 'Não foi possível conectar ao servidor. Verifique sua internet e tente de novo.';
+    } finally {
+      this.enviando = false;
     }
   }
 

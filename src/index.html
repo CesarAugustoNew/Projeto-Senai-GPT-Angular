@@ -1,12 +1,30 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <script src="https://kit.fontawesome.com/189e32e5d2.js" crossorigin="anonymous"></script>
   <meta charset="utf-8">
-  <title>SenaiGptWebAngular</title>
+  <title>SenaiGPT</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=Inter:opsz,wght@14..32,400..700&display=swap" rel="stylesheet">
+
+  <!--
+    Aplica o tema salvo antes do Angular iniciar, para a página não
+    piscar no modo claro ao recarregar. Mesma regra do ThemeService.
+  -->
+  <script>
+    (function () {
+      try {
+        var salvo = localStorage.getItem('senai-gpt-theme');
+        var dark = salvo ? salvo === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (dark) document.documentElement.classList.add('dark-theme');
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   <app-root></app-root>

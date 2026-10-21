@@ -1,149 +1,198 @@
-<div class="page-container">
+<div class="page" [class.page--menu-aberto]="sidebarAberta">
 
-    <aside class="side-bar">
-        <div class="menu-top">
-            <button class="button" (click)="novoChat()">+ New chat</button>
+    <aside class="sidebar" id="barra-lateral">
+        <div class="sidebar__top">
+            <app-logo class="sidebar__logo"></app-logo>
 
-            @for (chat of chats; track chat.id){
-            <button
-                class="btn"
-                [class.btn--active]="chatSelecionado?.id === chat.id"
-                (click)="onChatClick(chat)"
-            >
-                <span class="btn__title">{{ chat.chatTitle }}</span>
-                <i
-                    class="fa-solid fa-trash-can btn__delete"
-                    title="Apagar esta conversa"
+            <button class="new-chat" type="button" (click)="novoChat()">
+                <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                Nova conversa
+            </button>
+        </div>
+
+        <nav class="chat-list" aria-labelledby="titulo-conversas">
+            <h2 class="chat-list__heading" id="titulo-conversas">Conversas</h2>
+
+            @for (chat of chats; track chat.id) {
+            <div class="chat-item" [class.chat-item--active]="chatSelecionado?.id === chat.id">
+                <button
+                    type="button"
+                    class="chat-item__open"
+                    [attr.aria-current]="chatSelecionado?.id === chat.id ? 'page' : null"
+                    (click)="onChatClick(chat)"
+                >{{ chat.chatTitle }}</button>
+
+                <button
+                    type="button"
+                    class="chat-item__delete"
+                    title="Apagar conversa"
+                    [attr.aria-label]="'Apagar a conversa ' + chat.chatTitle"
                     (click)="deletarChat(chat, $event)"
-                ></i>
-            </button>
+                >
+                    <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
+                </button>
+            </div>
+            } @empty {
+            <p class="chat-list__empty">Suas conversas aparecem aqui.</p>
             }
+        </nav>
 
-            @if (chats.length === 0) {
-            <p class="empty-chats">Nenhuma conversa ainda. Clique em "+ New chat" para começar.</p>
-            }
-
-        </div>
-        <div class="menu-down">
-
-            <button class="font" (click)="clearConversations()"><i class="fa-solid fa-trash"></i>Clear
-                conversations</button>
-            <button class="font" (click)="theme.toggle()">
-                <i class="fa-solid" [class.fa-sun]="theme.isDark()" [class.fa-moon]="!theme.isDark()"></i>
-                {{ theme.isDark() ? 'Light mode' : 'Dark mode' }}
+        <div class="sidebar__menu">
+            <button class="menu-item" type="button" (click)="clearConversations()" [disabled]="chats.length === 0">
+                <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                Apagar todas as conversas
             </button>
-            <button class="font"><i class="fa-solid fa-user"></i>My account</button>
-            <button class="font"><i class="fa-solid fa-rotate"></i>Updates & FAQ</button>
-
-            <button (click)="deslogar()" class="font"><i class="fa-solid fa-arrow-right-from-bracket"></i>Log
-                out</button>
-
-
+            <button class="menu-item" type="button" (click)="theme.toggle()">
+                <i class="fa-solid" [class.fa-sun]="theme.isDark()" [class.fa-moon]="!theme.isDark()" aria-hidden="true"></i>
+                {{ theme.isDark() ? 'Modo claro' : 'Modo escuro' }}
+            </button>
+            <button class="menu-item" type="button">
+                <i class="fa-solid fa-user" aria-hidden="true"></i>
+                Minha conta
+            </button>
+            <button class="menu-item" type="button">
+                <i class="fa-solid fa-circle-question" aria-hidden="true"></i>
+                Novidades e ajuda
+            </button>
+            <button class="menu-item" type="button" (click)="deslogar()">
+                <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
+                Sair
+            </button>
         </div>
-
-
     </aside>
 
-    <main class="central-panel">
+    <div class="backdrop" (click)="sidebarAberta = false" aria-hidden="true"></div>
 
-        @if (chatSelecionado == null) {
+    <main class="main">
 
-        <div class="logo"></div>
+        <header class="topbar" [class.topbar--vazia]="!chatSelecionado">
+            <button
+                type="button"
+                class="topbar__menu"
+                aria-label="Abrir menu"
+                aria-controls="barra-lateral"
+                [attr.aria-expanded]="sidebarAberta"
+                (click)="sidebarAberta = !sidebarAberta"
+            >
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
 
-        <div class="dicas-container">
+            @if (chatSelecionado) {
+            <h1 class="topbar__title">{{ chatSelecionado.chatTitle }}</h1>
+            } @else {
+            <app-logo class="topbar__logo"></app-logo>
+            }
+        </header>
 
+        @if (chatSelecionado) {
 
-            <div class="dicas-item">
-                <h2>
-                    <i class="fa-regular fa-comments"></i>
-                    Examples
-                </h2>
-
-                <p>"Explain quantum computing insimple terms"</p>
-                <p>"Got any creative ideas for a 10year old's birthday?"</p>
-                <p>"How do I make an HTTP requestin Javascript?"</p>
-            </div>
-
-            <div class="dicas-item">
-                <h2>
-                    <i class="fa-regular fa-star"></i>
-                    Capabilities
-                </h2>
-
-                <p>"Remembers what user saidearlier in the conversation."</p>
-                <p>"Allows user to provide follow-up corrections."</p>
-                <p>"Trained to decline inappropriate requests."</p>
-            </div>
-
-            <div class="dicas-item">
-                <h2>
-                    <i class="fa-solid fa-user-shield"></i>
-                    Limitations
-                </h2>
-
-                <p>"May occasionally generate incorrect information."</p>
-                <p>"May occasionally produce harmful instructions or biased content."</p>
-                <p>"Limited knowledge of world andevents after 2021."</p>
-            </div>
-
-        </div>
-
-        }
-
-        @if (chatSelecionado != null) {
-
-
-        <div class="chat-container">
-
-            <div class="chat-header">
-                <h2>
-                    {{ chatSelecionado.chatTitle }}
-                </h2>
-
-            </div>
-
-            <div class="chat-messages" #chatMessagesEl>
-                @for (msg of messages; track msg.id){
-                <p class="message-item" [class.chatbot]="msg.userId == 'chatbot'">{{ msg.text }}</p>
-
+        <div class="conversation" #chatMessagesEl>
+            <div class="conversation__inner">
+                @for (msg of messages; track msg.id) {
+                @if (msg.userId == 'chatbot') {
+                <div class="msg msg--bot">
+                    <img class="msg__avatar" src="imgs/simbolo.png" alt="SenaiGPT">
+                    <p class="msg__text">{{ msg.text }}</p>
+                </div>
+                } @else {
+                <div class="msg msg--user">
+                    <p class="msg__text">{{ msg.text }}</p>
+                </div>
+                }
+                } @empty {
+                @if (!enviandoMensagem) {
+                <p class="conversation__empty">Envie a primeira mensagem desta conversa.</p>
+                }
                 }
 
                 @if (enviandoMensagem) {
-                <p class="message-item chatbot message-item--loading">
-                    <span class="typing-dot"></span>
-                    <span class="typing-dot"></span>
-                    <span class="typing-dot"></span>
-                </p>
+                <div class="msg msg--bot" role="status" aria-label="SenaiGPT está respondendo">
+                    <img class="msg__avatar" src="imgs/simbolo.png" alt="">
+                    <p class="msg__typing">
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                    </p>
+                </div>
                 }
             </div>
-
-
         </div>
-        <div class="message">
-            <button aria-label="Send image">
-                <i class="fa-solid fa-image"></i>
-            </button>
 
-            <input
-                [formControl]="userMessage"
-                type="text"
-                placeholder="Type your message"
-                (keydown)="onMessageKeydown($event)"
-            >
-            <button aria-label="Send voice message">
-                <i class="fa-solid fa-microphone"></i>
-            </button>
+        <div class="composer-wrap">
+            <div class="composer">
+                <button class="composer__icon" type="button" aria-label="Enviar imagem">
+                    <i class="fa-solid fa-image" aria-hidden="true"></i>
+                </button>
 
-            <button
-                aria-label="Send message"
-                (click)="sendMessage()"
-                [disabled]="!userMessage.value || enviandoMensagem"
-            >
-                <i class="fa-solid fa-paper-plane"></i>
-            </button>
+                <input
+                    class="composer__input"
+                    [formControl]="userMessage"
+                    type="text"
+                    placeholder="Escreva sua mensagem"
+                    aria-label="Mensagem"
+                    (keydown)="onMessageKeydown($event)"
+                >
+
+                <button class="composer__icon" type="button" aria-label="Enviar mensagem de voz">
+                    <i class="fa-solid fa-microphone" aria-hidden="true"></i>
+                </button>
+
+                <button
+                    class="composer__send"
+                    type="button"
+                    aria-label="Enviar mensagem"
+                    (click)="sendMessage()"
+                    [disabled]="!userMessage.value || enviandoMensagem"
+                >
+                    <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+                </button>
+            </div>
+            <p class="composer__note">O SenaiGPT pode errar. Confira informações importantes.</p>
         </div>
+
+        } @else {
+
+        <section class="welcome">
+            <img class="welcome__mark" src="imgs/simbolo.png" alt="">
+            <h1 class="welcome__title">Sobre o que vamos estudar hoje?</h1>
+
+            <ul class="examples" aria-label="Exemplos de perguntas">
+                @for (exemplo of exemplos; track exemplo) {
+                <li>
+                    <button
+                        type="button"
+                        class="example"
+                        [disabled]="enviandoMensagem"
+                        (click)="comecarComExemplo(exemplo)"
+                    >
+                        <span>{{ exemplo }}</span>
+                        <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+                    </button>
+                </li>
+                }
+            </ul>
+
+            <div class="about">
+                <div>
+                    <h2><i class="fa-regular fa-star" aria-hidden="true"></i> O que ele faz</h2>
+                    <ul>
+                        <li>Responde de forma direta e objetiva.</li>
+                        <li>Explica código, fórmulas e conceitos técnicos.</li>
+                        <li>Guarda suas conversas para você voltar depois.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h2><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Limites</h2>
+                    <ul>
+                        <li>Pode dar respostas erradas. Confira antes de usar.</li>
+                        <li>Cada pergunta é respondida sem considerar as anteriores.</li>
+                        <li>Ainda não entende imagens nem áudio.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
         }
-
 
     </main>
 </div>

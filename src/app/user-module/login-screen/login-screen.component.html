@@ -1,31 +1,60 @@
-<header></header>
+<main class="auth">
 
-<main class="page-container">
-    <app-theme-toggle class="theme-toggle__fixed"></app-theme-toggle>
+    <div class="auth__photo" aria-hidden="true"></div>
 
-    <div class="robo-image">
-        <h1></h1>
-    </div>
+    <section class="auth__panel">
+        <app-theme-toggle class="auth__theme"></app-theme-toggle>
 
-    <div class="login-container" [formGroup]="loginForm">
-        <img class="logo" src="imgs/Chat.png" alt="Logo do SenaiGPT.">
+        <form class="auth__form" [formGroup]="loginForm" (ngSubmit)="onLoginClick()">
+            <app-logo class="auth__logo"></app-logo>
 
-        <h1 class="titulo-login">Login</h1>
+            <h1 class="auth__title">Entrar</h1>
+            <p class="auth__lead">Continue de onde parou nas suas conversas.</p>
 
-        <input class="inpt" type="text" placeholder="Insira o e-mail" formControlName="email">
-        <span class="error-message">{{this.emailErrorMessage}}</span>
-        <input class="inpt" type="password" placeholder="Insira a senha" formControlName="password">
-        <span class="error-message">{{this.passwordErrorMessage}}</span>
-        <button class="btt" (click)="onLoginClick()">Entrar</button>
-        <span class="incorreto-message">{{this.incorretoErrorMessage}}</span>
-        <span class="sucesso-message">{{this.sucessoMessage}}</span>
+            <div class="field">
+                <label for="login-email">E-mail</label>
+                <input
+                    id="login-email"
+                    type="email"
+                    autocomplete="email"
+                    placeholder="voce@email.com"
+                    formControlName="email"
+                    [class.is-invalid]="emailErrorMessage"
+                >
+                @if (emailErrorMessage) {
+                <p class="field__error">{{ emailErrorMessage }}</p>
+                }
+            </div>
 
-        <p class="cadastro-link">
-            Ainda não tem uma conta? <a routerLink="/usuario">Cadastre-se</a>
-        </p>
+            <div class="field">
+                <label for="login-senha">Senha</label>
+                <input
+                    id="login-senha"
+                    type="password"
+                    autocomplete="current-password"
+                    formControlName="password"
+                    [class.is-invalid]="passwordErrorMessage"
+                >
+                @if (passwordErrorMessage) {
+                <p class="field__error">{{ passwordErrorMessage }}</p>
+                }
+            </div>
 
-    </div>
+            <button class="auth__submit" type="submit" [disabled]="enviando">
+                {{ enviando ? 'Entrando…' : 'Entrar' }}
+            </button>
+
+            @if (erroMessage) {
+            <p class="auth__status auth__status--error" role="alert">{{ erroMessage }}</p>
+            }
+            @if (sucessoMessage) {
+            <p class="auth__status auth__status--success" role="status">{{ sucessoMessage }}</p>
+            }
+
+            <p class="auth__switch">
+                Ainda não tem uma conta? <a routerLink="/usuario">Criar conta</a>
+            </p>
+        </form>
+    </section>
 
 </main>
-
-<footer></footer>

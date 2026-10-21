@@ -1,0 +1,182 @@
+/*
+  Estilos compartilhados pelas telas de login e cadastro.
+  Foto do robô à esquerda, formulário à direita; abaixo de 900px a foto
+  sai e o formulário ocupa a tela inteira.
+*/
+
+.auth {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100dvh;
+  background-color: var(--surface);
+}
+
+.auth__photo {
+  background-image: url("/imgs/robo.webp");
+  background-size: cover;
+  background-position: center 30%;
+  background-color: #2a2b2e;
+}
+
+.auth__panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 72px 48px;
+}
+
+.auth__theme {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.auth__form {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth__logo {
+  height: 30px;
+  margin-bottom: 40px;
+}
+
+.auth__title {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: clamp(2.5rem, 4.4vw, 3.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+}
+
+.auth__lead {
+  margin-top: 12px;
+  margin-bottom: 32px;
+  color: var(--ink-muted);
+  font-size: 1rem;
+  text-wrap: pretty;
+}
+
+/* Campos */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.field label {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.field input {
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background-color: var(--surface-sunken);
+  transition: border-color .15s ease, background-color .15s ease;
+}
+
+.field input::placeholder {
+  color: var(--ink-faint);
+}
+
+.field input:hover {
+  border-color: var(--ink-faint);
+}
+
+.field input:focus {
+  outline: none;
+  border-color: var(--ink);
+  background-color: var(--surface);
+}
+
+.field input.is-invalid {
+  border-color: var(--brand-text);
+}
+
+.field__hint {
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+}
+
+.field__error {
+  font-size: 0.8125rem;
+  color: var(--brand-text);
+}
+
+/* Ações */
+
+.auth__submit {
+  height: 50px;
+  margin-top: 8px;
+  border: none;
+  border-radius: var(--radius-md);
+  background-color: var(--primary-bg);
+  color: var(--primary-fg);
+  font-weight: 600;
+  font-size: 1rem;
+  transition: opacity .15s ease;
+}
+
+.auth__submit:hover {
+  opacity: 0.88;
+}
+
+.auth__submit[disabled] {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.auth__status {
+  margin-top: 14px;
+  font-size: 0.875rem;
+}
+
+.auth__status--error {
+  color: var(--brand-text);
+}
+
+.auth__status--success {
+  color: var(--success);
+}
+
+.auth__switch {
+  margin-top: 28px;
+  font-size: 0.9375rem;
+  color: var(--ink-muted);
+}
+
+.auth__switch a {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.auth__switch a:hover {
+  color: var(--brand-text);
+}
+
+@media (max-width: 900px) {
+  .auth {
+    grid-template-columns: 1fr;
+  }
+
+  .auth__photo {
+    display: none;
+  }
+
+  .auth__panel {
+    padding: 88px 16px 48px;
+    align-items: flex-start;
+  }
+}
