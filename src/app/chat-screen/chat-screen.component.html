@@ -2,7 +2,9 @@
 
     <aside class="sidebar" id="barra-lateral">
         <div class="sidebar__top">
-            <app-logo class="sidebar__logo"></app-logo>
+            <button type="button" class="logo-link sidebar__logo" aria-label="Ir para a página inicial" (click)="irParaInicio()">
+                <app-logo></app-logo>
+            </button>
 
             <button class="new-chat" type="button" (click)="novoChat()">
                 <i class="fa-solid fa-plus" aria-hidden="true"></i>
@@ -80,7 +82,9 @@
             @if (chatSelecionado) {
             <h1 class="topbar__title">{{ chatSelecionado.chatTitle }}</h1>
             } @else {
-            <app-logo class="topbar__logo"></app-logo>
+            <button type="button" class="logo-link topbar__logo" aria-label="Ir para a página inicial" (click)="irParaInicio()">
+                <app-logo></app-logo>
+            </button>
             }
         </header>
 
@@ -195,4 +199,42 @@
         }
 
     </main>
+
+    <dialog
+        #novoChatDialog
+        class="dialog"
+        aria-labelledby="titulo-novo-chat"
+        (click)="onNovoChatDialogClick($event)"
+        (cancel)="criandoChat && $event.preventDefault()"
+    >
+        <form class="dialog__box" (submit)="confirmarNovoChat($event)">
+            <h2 class="dialog__title" id="titulo-novo-chat">Nova conversa</h2>
+
+            <label class="dialog__label" for="nome-novo-chat">Nome da conversa</label>
+            <input
+                class="dialog__input"
+                [class.dialog__input--erro]="erroNovoChat"
+                id="nome-novo-chat"
+                type="text"
+                placeholder="Ex.: Revisão de eletrônica"
+                autocomplete="off"
+                autofocus
+                maxlength="80"
+                [formControl]="nomeNovoChat"
+                [attr.aria-invalid]="erroNovoChat ? true : null"
+                aria-describedby="erro-novo-chat"
+                (input)="erroNovoChat = ''"
+            >
+            <p class="dialog__erro" id="erro-novo-chat" role="alert">{{ erroNovoChat }}</p>
+
+            <div class="dialog__actions">
+                <button type="button" class="dialog__btn" (click)="fecharNovoChat()" [disabled]="criandoChat">
+                    Cancelar
+                </button>
+                <button type="submit" class="dialog__btn dialog__btn--primary" [disabled]="criandoChat">
+                    {{ criandoChat ? 'Criando...' : 'Criar conversa' }}
+                </button>
+            </div>
+        </form>
+    </dialog>
 </div>

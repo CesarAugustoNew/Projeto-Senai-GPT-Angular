@@ -21,6 +21,24 @@
     border-right: 1px solid var(--line);
 }
 
+/* Logo clicável: volta para a tela inicial */
+.logo-link {
+    display: block;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    background: none;
+    transition: opacity .15s ease;
+}
+
+.logo-link:hover {
+    opacity: 0.75;
+}
+
+.logo-link app-logo {
+    height: 100%;
+}
+
 .sidebar__logo {
     height: 26px;
     margin: 4px 10px 0;
@@ -510,6 +528,122 @@
     text-align: center;
     font-size: 0.75rem;
     color: var(--ink-muted);
+}
+
+/* ===================== Caixa "Nova conversa" ===================== */
+
+.dialog {
+    width: min(420px, calc(100vw - 32px));
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background-color: var(--surface);
+    color: var(--ink);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+}
+
+.dialog[open] {
+    animation: dialog-entrar .18s ease-out;
+}
+
+.dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.45);
+}
+
+@keyframes dialog-entrar {
+    from { opacity: 0; transform: translateY(8px) scale(0.98); }
+    to { opacity: 1; transform: none; }
+}
+
+.dialog__box {
+    padding: 24px;
+}
+
+.dialog__title {
+    margin-bottom: 18px;
+    font-family: var(--font-display);
+    font-stretch: 112%;
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.dialog__label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ink-muted);
+}
+
+.dialog__input {
+    width: 100%;
+    height: 44px;
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background-color: var(--surface);
+    outline: none;
+    font-size: 1rem;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.dialog__input::placeholder {
+    color: var(--ink-faint);
+}
+
+.dialog__input:focus {
+    border-color: var(--ink-faint);
+    box-shadow: 0 0 0 3px var(--brand-soft);
+}
+
+.dialog__input--erro,
+.dialog__input--erro:focus {
+    border-color: var(--brand);
+}
+
+.dialog__erro {
+    min-height: 1.25rem;
+    margin-top: 6px;
+    font-size: 0.8125rem;
+    color: var(--brand-text);
+}
+
+.dialog__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.dialog__btn {
+    height: 40px;
+    padding: 0 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: none;
+    font-weight: 600;
+    transition: background-color .15s ease, opacity .15s ease;
+}
+
+.dialog__btn:hover:not([disabled]) {
+    background-color: var(--surface-raised);
+}
+
+.dialog__btn--primary {
+    border-color: transparent;
+    background-color: var(--primary-bg);
+    color: var(--primary-fg);
+}
+
+.dialog__btn--primary:hover:not([disabled]) {
+    background-color: var(--primary-bg);
+    opacity: 0.88;
+}
+
+.dialog__btn[disabled] {
+    opacity: 0.5;
+    cursor: progress;
 }
 
 /* ===================== Celular e tablet ===================== */

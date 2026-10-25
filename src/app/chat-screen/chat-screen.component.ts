@@ -53,7 +53,13 @@ export class ChatScreen implements AfterViewChecked {
     'Monte um plano de estudos de lógica de programação para 2 semanas',
   ];
 
+  // Caixa de "Nova conversa": substitui o prompt() do navegador.
+  nomeNovoChat = new FormControl('');
+  erroNovoChat = '';
+  criandoChat = false;
+
   @ViewChild('chatMessagesEl') private chatMessagesEl?: ElementRef<HTMLDivElement>;
+  @ViewChild('novoChatDialog') private novoChatDialog?: ElementRef<HTMLDialogElement>;
   private deveRolarParaFinal = false;
 
   private readonly apiBase = 'https://senai-gpt-api.azurewebsites.net';
@@ -128,14 +134,23 @@ export class ChatScreen implements AfterViewChecked {
     }
   }
 
+  // Só recarrega as mensagens se o usuário ainda estiver nessa conversa
+  // (ele pode ter voltado para o início ou aberto outra enquanto a IA responde).
+  private async atualizarSeAberto(chat: IChat) {
+    if (this.chatSelecionado?.id === chat.id) {
+      await this.onChatClick(chat);
+    }
+  }
+
   async sendMessage() {
     if (!this.chatSelecionado || !this.userMessage.value || this.enviandoMensagem) return;
 
     this.enviandoMensagem = true;
+    const chat = this.chatSelecionado;
 
     try {
       const newMessageUser: Partial<IMessage> = {
-        chatId: this.chatSelecionado.id,
+        chatId: chat.id,
         userId: localStorage.getItem('meuId')!,
         text: this.userMessage.value,
       };
@@ -147,7 +162,7 @@ export class ChatScreen implements AfterViewChecked {
       );
 
       this.userMessage.setValue('');
-      await this.onChatClick(this.chatSelecionado);
+      await this.atualizarSeAberto(chat);
 
       const respostaIA: any = await firstValueFrom(
         this.http.post(
@@ -173,7 +188,7 @@ export class ChatScreen implements AfterViewChecked {
       );
 
       const newAnswerIA: Partial<IMessage> = {
-        chatId: this.chatSelecionado.id,
+        chatId: chat.id,
         userId: 'chatbot',
         text:
           respostaIA?.candidates?.[0]?.content?.parts?.[0]?.text ||
@@ -186,7 +201,7 @@ export class ChatScreen implements AfterViewChecked {
         }),
       );
 
-      await this.onChatClick(this.chatSelecionado);
+      await this.atualizarSeAberto(chat);
     } catch (err) {
       console.error('Erro ao enviar mensagem:', err);
       alert('Não foi possível enviar a mensagem. Tente novamente.');
@@ -203,16 +218,50 @@ export class ChatScreen implements AfterViewChecked {
     }
   }
 
-  async novoChat() {
-    const nomeChat = prompt('Nome da nova conversa:');
-    if (nomeChat === null) return; // usuário cancelou
+  // Clicar no logo volta para a tela inicial (sem conversa aberta).
+  irParaInicio() {
+    this.chatSelecionado = null;
+    this.messages = [];
+    this.sidebarAberta = false;
+  }
 
-    if (!nomeChat.trim()) {
-      alert('Dê um nome para a conversa.');
+  novoChat() {
+    this.nomeNovoChat.setValue('');
+    this.erroNovoChat = '';
+    this.sidebarAberta = false;
+    this.novoChatDialog?.nativeElement.showModal();
+  }
+
+  fecharNovoChat() {
+    if (this.criandoChat) return;
+    this.novoChatDialog?.nativeElement.close();
+  }
+
+  // Clique fora da caixa (no fundo escurecido) fecha.
+  onNovoChatDialogClick(event: MouseEvent) {
+    if (event.target === this.novoChatDialog?.nativeElement) {
+      this.fecharNovoChat();
+    }
+  }
+
+  async confirmarNovoChat(event: Event) {
+    event.preventDefault();
+    if (this.criandoChat) return;
+
+    const nomeChat = (this.nomeNovoChat.value || '').trim();
+    if (!nomeChat) {
+      this.erroNovoChat = 'Dê um nome para a conversa.';
       return;
     }
 
-    await this.criarChat(nomeChat.trim());
+    this.criandoChat = true;
+    const criado = await this.criarChat(nomeChat);
+    this.criandoChat = false;
+
+    if (criado) {
+      this.novoChatDialog?.nativeElement.close();
+    }
+    this.cd.detectChanges();
   }
 
   async comecarComExemplo(texto: string) {
